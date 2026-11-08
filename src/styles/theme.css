@@ -1,0 +1,40 @@
+/*
+ * Slocial theme tokens
+ * ---------------------------------------------------------------
+ * These are dummy colors, we need to decide which colors we want to use ourselves
+ */
+:root {
+  /* Surfaces */
+  --bg: #0f1012;          /* app background */
+  --surface: #18191c;     /* header, nav, cards, sheets */
+  --raised: #222327;      /* inputs, info tiles, chips */
+  --soft: #2a2b30;        /* icon tiles, tags */
+  --line: #2c2d32;        /* borders + dividers */
+
+  /* Text */
+  --ink: #ededef;         /* primary text */
+  --muted: #9a9ba1;       /* secondary text */
+
+  /* Brand / actions (placeholder until palette is chosen) */
+  --primary: #ededef;
+  --on-primary: #111214;
+
+  /* Status */
+  --ok: #8fd6a8;
+  --danger: #ff6b6b;
+
+  /* Map */
+  --map: #141518;
+  --map-road: #26272c;
+  --map-park: #1c211e;
+  --map-water: #161c22;
+  --map-block: #1b1c20;
+  --you: #8fb3ff;         /* "You are here" dot */
+
+  /* Event categories (pins + icon tiles) */
+  --cat-music: #b9b9c2;
+  --cat-sports: #b9b9c2;
+  --cat-party: #b9b9c2;
+  --cat-movie: #b9b9c2;
+  --cat-casual: #b9b9c2;
+}
