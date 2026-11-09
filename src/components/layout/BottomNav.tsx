@@ -1,18 +1,30 @@
+import { BookmarkIcon, MapIcon, UserIcon } from 'lucide-react'
 import { NavLink } from 'react-router'
 
-// Map / Profile / My Events tabs.
-// TODO: style it and add icons.
+// Map / Profile / My events tabs.
+
+const TABS = [
+  { to: '/', label: 'Map', Icon: MapIcon, end: true },
+  { to: '/profile', label: 'Profile', Icon: UserIcon, end: false },
+  { to: '/events', label: 'My events', Icon: BookmarkIcon, end: false },
+]
+
 export function BottomNav() {
-  const tabs = [
-    { to: '/', label: 'Map' },
-    { to: '/profile', label: 'Profile' },
-    { to: '/events', label: 'My Events' },
-  ]
   return (
-    <nav className="flex h-14 shrink-0 items-center justify-around border-t border-line bg-surface text-xs">
-      {tabs.map((t) => (
-        <NavLink key={t.to} to={t.to} end className={({ isActive }) => (isActive ? 'font-bold text-ink' : 'text-muted')}>
-          {t.label}
+    <nav aria-label="Main" className="flex h-[62px] shrink-0 items-center justify-around bg-surface pb-1">
+      {TABS.map(({ to, label, Icon, end }) => (
+        <NavLink
+          key={to}
+          to={to}
+          end={end}
+          className={({ isActive }) =>
+            `flex w-20 flex-col items-center gap-0.5 rounded-lg py-1 text-[10.5px] focus-visible:outline-2 focus-visible:outline-primary ${
+              isActive ? 'font-bold text-primary' : 'text-muted hover:text-ink'
+            }`
+          }
+        >
+          <Icon size={20} />
+          {label}
         </NavLink>
       ))}
     </nav>

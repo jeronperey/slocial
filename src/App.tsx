@@ -9,12 +9,14 @@ import { MyEventsPage } from './pages/MyEventsPage'
 import { NotFoundPage } from './pages/NotFoundPage'
 import { ProfilePage } from './pages/ProfilePage'
 import { ReportEventPage } from './pages/ReportEventPage'
+import { UiKitPage } from './pages/UiKitPage'
 
 export default function App() {
   return (
     <PhoneFrame>
       <Routes>
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/ui" element={<UiKitPage />} />
 
         <Route element={<TabLayout />}>
           <Route index element={<MapPage />} />

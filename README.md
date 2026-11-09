@@ -13,6 +13,15 @@ npm run build    # type-check + production build
 npm run lint
 ```
 
+## UI kit preview
+
+To see every shared component (buttons, inputs, checkboxes, radios, chips, tags, toast, header) in each of its variants:
+
+1. Run `npm run dev`
+2. Open http://localhost:5173/ui
+
+The page lives in `src/pages/UiKitPage.tsx`. Add new shared components there so the team can check them.
+
 ## Stack
 
 Vite · React · TypeScript · React Router · Tailwind CSS · lucide-react (icons)
