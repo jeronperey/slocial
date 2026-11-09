@@ -5,8 +5,8 @@ import { NavLink } from 'react-router'
 
 const TABS = [
   { to: '/', label: 'Map', Icon: MapIcon, end: true },
-  { to: '/profile', label: 'Profile', Icon: UserIcon, end: false },
   { to: '/events', label: 'My events', Icon: BookmarkIcon, end: false },
+  { to: '/profile', label: 'Profile', Icon: UserIcon, end: false },
 ]
 
 export function BottomNav() {
