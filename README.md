@@ -10,6 +10,7 @@ Design source: [Figma – Events Around You (Prototype v2)](https://www.figma.co
 npm install
 npm run dev      # http://localhost:5173
 npm run build    # type-check + production build
+npm run prettier # runs style 
 npm run lint
 ```
 
