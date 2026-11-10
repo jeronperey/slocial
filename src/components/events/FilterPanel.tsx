@@ -1,20 +1,26 @@
-import { useState } from 'react'
-import { Button } from '../ui/Button'
-import { Checkbox } from '../ui/Checkbox'
-import { Radio } from '../ui/Radio'
-import { SectionLabel } from '../ui/SectionLabel'
-import { CATEGORIES, DEFAULT_FILTERS, RADIUS_OPTIONS, toggleCategory, type Filters } from './filterLogic'
+import { useState } from "react";
+import { Button } from "../ui/Button";
+import { Checkbox } from "../ui/Checkbox";
+import { Radio } from "../ui/Radio";
+import { SectionLabel } from "../ui/SectionLabel";
+import {
+  CATEGORIES,
+  DEFAULT_FILTERS,
+  RADIUS_OPTIONS,
+  toggleCategory,
+  type Filters,
+} from "./filterLogic";
 
 // Drop-down sheet: Category / Location radius / Other, with Apply.
 // Edits a draft copy; nothing changes on the map until Apply is pressed.
 
 interface FilterPanelProps {
-  filters: Filters
-  onApply: (filters: Filters) => void
+  filters: Filters;
+  onApply: (filters: Filters) => void;
 }
 
 export function FilterPanel({ filters, onApply }: FilterPanelProps) {
-  const [draft, setDraft] = useState<Filters>(filters)
+  const [draft, setDraft] = useState<Filters>(filters);
 
   return (
     <div
@@ -46,8 +52,16 @@ export function FilterPanel({ filters, onApply }: FilterPanelProps) {
       ))}
 
       <SectionLabel>Other</SectionLabel>
-      <Checkbox label="Free events only" checked={draft.freeOnly} onChange={(freeOnly) => setDraft({ ...draft, freeOnly })} />
-      <Checkbox label="Happening today" checked={draft.todayOnly} onChange={(todayOnly) => setDraft({ ...draft, todayOnly })} />
+      <Checkbox
+        label="Free events only"
+        checked={draft.freeOnly}
+        onChange={(freeOnly) => setDraft({ ...draft, freeOnly })}
+      />
+      <Checkbox
+        label="Happening today"
+        checked={draft.todayOnly}
+        onChange={(todayOnly) => setDraft({ ...draft, todayOnly })}
+      />
 
       <div className="mt-4 flex gap-2">
         <Button variant="secondary" onClick={() => setDraft(DEFAULT_FILTERS)}>
@@ -58,5 +72,5 @@ export function FilterPanel({ filters, onApply }: FilterPanelProps) {
         </Button>
       </div>
     </div>
-  )
+  );
 }
