@@ -4,6 +4,11 @@ import { EventInfo } from "./EventInfo";
 import type { Category } from "../../data/types";
 import { useState } from "react";
 import { Button } from "../ui/Button";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faXmark } from "@fortawesome/free-solid-svg-icons/faXmark";
+import { useAppStore } from "../../store/AppStore";
+import { faFlag } from "@fortawesome/free-solid-svg-icons/faFlag";
+import { faBookmark } from "@fortawesome/free-solid-svg-icons/faBookmark";
 
 // Modal over the map: summary, description, info, Register / Save / Report.
 // TODO: build this component.
@@ -32,15 +37,65 @@ export function EventPopup({
   price,
   restrictions,
 }: EventPopupProps) {
-  const [going, setGoing] = useState(true);
+  const [going, setGoing] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [reported, setReported] = useState(false);
+  const { registerForEvent, unregisterFromEvent, saveEvent, unsaveEvent, reportEvent, unreportEvent } = useAppStore();
+  function handleRegister() {
+    if (!going) {
+      registerForEvent({
+        name,
+        categories,
+        date,
+        time,
+        location
+      });
+    } else {
+      unregisterFromEvent(name);
+    }
+    setGoing(!going);
+  }
+
+  function handleSave() {
+    if(!saved) {
+      saveEvent({
+        name,
+        categories,
+        date,
+        time,
+        location,
+      });
+    } else {
+      unsaveEvent(name);
+    }
+    setSaved(!saved);
+  }
+
+  function handleReport() {
+    if(!reported) {
+      reportEvent({
+        name,
+        categories,
+        date,
+        time,
+        location,
+      });
+    } else {
+      unreportEvent(name);
+    }
+    setReported(!reported);
+  }
   if (!isOpen) return null;
 
   return (
     <div
-      className=" slocial-fade-up rounded-xl fixed z-50 inset-0 bg-secondary/50 backdrop-blur-sm flex items-center flex-col p-4 justify-center"
-      onMouseDown={onClose}
+      className=" slocial-fade-up  fixed z-50 inset-0 backdrop-blur-sm flex items-center flex-col p-4 justify-center"
+      
     >
-      <div className="flex flex-col gap-4">
+     
+           <div className="flex flex-col gap-4 rounded-xl bg-line p-8 relative">
+            <div>
+
         <EventSummary
           name={name}
           date={date}
@@ -49,15 +104,29 @@ export function EventPopup({
           categories={categories}
           going={going}
         />
+        <FontAwesomeIcon
+          icon={faXmark}
+          className="absolute top-4 right-4 w-6 h-6 cursor-pointer"
+          onClick={onClose}
+        />
+        </div>
         <EventCard description={description} />
         <EventInfo price={price} restrictions={restrictions} />
 
-        <div className="flex flex-row gap-2">
-          <Button onClick={() => setGoing(!going)} variant={going ? "success" : "secondary"}>
+        <div className="flex flex-row gap-2 w-full justify-center">
+          <Button onClick={() => handleRegister()} variant={going ? "success" : "secondary"}>
             {going ? "Registered" : "Register"}
           </Button>
-          <Button variant="secondary">Save</Button>
-          <Button variant="danger">Report</Button>
+          <Button onClick={() => handleSave()} variant={saved ? "success" : "secondary"}>
+            
+            {saved ? "Saved" : "Save"}
+            <FontAwesomeIcon icon={faBookmark}/>
+          </Button>
+          <Button onClick={() => handleReport()} variant="danger">
+            
+            {reported ? "Reported" : "Report"}
+            <FontAwesomeIcon icon={faFlag}/>
+          </Button>
         </div>
       </div>
     </div>

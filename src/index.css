@@ -1,5 +1,8 @@
+@import url("https://fonts.googleapis.com/css2?family=Capriola&family=Inter:wght@400;500;600;700&display=swap");
+
 @import "tailwindcss";
 @import "./styles/theme.css";
+
 
 @theme inline {
   --color-bg: var(--bg);
@@ -17,6 +20,8 @@
 
   --font-sans:
     "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  --font-title: "Capriola", sans-serif;
 }
 
 html,
@@ -31,6 +36,12 @@ body {
   color: var(--ink);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+}
+
+@layer base{
+  h2{
+    @apply font-title text-lg font-bold;
+  }
 }
 
 @keyframes slocial-fade-up {

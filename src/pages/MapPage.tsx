@@ -1,9 +1,12 @@
+import { useState } from "react";
 import { EventPopup } from "../components/events/EventPopup";
 import { PagePlaceholder } from "../components/Placeholder";
 
 // Home screen: map of nearby events with filters and an event popup (register, save, report).
 // TODO: build this page.
 export function MapPage() {
+  const [open, setOpen] = useState(true);
+  
   return (
     <div>
       <PagePlaceholder
@@ -11,8 +14,8 @@ export function MapPage() {
         description="Home screen: map of nearby events with filters and an event popup (register, save, report)."
       />
       <EventPopup
-        isOpen={true}
-        onClose={() => {}}
+        isOpen={open}
+        onClose={() => {setOpen(false)}}
         categories={["casual"]}
         name="Corgi Meetup"
         date="Saturday October 14th"

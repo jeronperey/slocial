@@ -9,7 +9,7 @@ export function EventCard({ description }: EventCardProps) {
     <div>
       {description && (
         <div className="flex flex-col gap-1 mt-2 ">
-          <h3 className="border-b border-gray-300 pb-2">Description</h3>
+          <h2 className="border-b border-gray-300 pb-2">Description</h2>
           <p>{description}</p>
         </div>
       )}
