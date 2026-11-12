@@ -4,6 +4,8 @@ export interface SlocialEvent {
   id: string
   title: string
   category: Category
+  lat: number
+  lng: number
   // TODO: date, time, address, description, price, restrictions, map position…
 }
 

@@ -42,3 +42,7 @@ body {
 }
 .animate-fade-up { animation: slocial-fade-up 180ms ease-out; }
 .animate-drop { animation: slocial-drop 180ms ease-out; }
+
+.dark-tiles .leaflet-tile-pane {
+  filter: invert(1) hue-rotate(180deg) brightness(0.9) contrast(0.9);
+}
