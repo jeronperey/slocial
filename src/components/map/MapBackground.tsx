@@ -1,4 +1,3 @@
-import { Placeholder } from '../Placeholder'
 import type { ReactNode } from 'react'
 import { MapContainer, TileLayer } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
