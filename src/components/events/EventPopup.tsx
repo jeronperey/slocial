@@ -40,7 +40,14 @@ export function EventPopup({
   const [going, setGoing] = useState(false);
   const [saved, setSaved] = useState(false);
   const [reported, setReported] = useState(false);
-  const { registerForEvent, unregisterFromEvent, saveEvent, unsaveEvent, reportEvent, unreportEvent } = useAppStore();
+  const {
+    registerForEvent,
+    unregisterFromEvent,
+    saveEvent,
+    unsaveEvent,
+    reportEvent,
+    unreportEvent,
+  } = useAppStore();
   function handleRegister() {
     if (!going) {
       registerForEvent({
@@ -48,7 +55,7 @@ export function EventPopup({
         categories,
         date,
         time,
-        location
+        location,
       });
     } else {
       unregisterFromEvent(name);
@@ -57,7 +64,7 @@ export function EventPopup({
   }
 
   function handleSave() {
-    if(!saved) {
+    if (!saved) {
       saveEvent({
         name,
         categories,
@@ -72,7 +79,7 @@ export function EventPopup({
   }
 
   function handleReport() {
-    if(!reported) {
+    if (!reported) {
       reportEvent({
         name,
         categories,
@@ -88,49 +95,53 @@ export function EventPopup({
   if (!isOpen) return null;
 
   return (
-    <div
-      className=" slocial-fade-up  fixed z-50 inset-0 backdrop-blur-sm flex items-center flex-col p-4 justify-center"
-      
-    >
-     
-           <div className="flex flex-col gap-4 rounded-xl bg-line p-8 relative">
-            <div>
-
-        <EventSummary
-          name={name}
-          date={date}
-          time={time}
-          location={location}
-          categories={categories}
-          going={going}
-        />
-        <FontAwesomeIcon
-          icon={faXmark}
-          className="absolute top-4 right-4 w-6 h-6 cursor-pointer"
-          onClick={onClose}
-        />
+    <div className=" slocial-fade-up  fixed z-50 inset-0 backdrop-blur-sm flex items-center flex-col p-4 justify-center">
+      <div className="flex flex-col gap-4 rounded-xl bg-line p-8 relative">
+        <div>
+          <EventSummary
+            name={name}
+            date={date}
+            time={time}
+            location={location}
+            categories={categories}
+            going={going}
+          />
+          <FontAwesomeIcon
+            icon={faXmark}
+            className="absolute top-4 right-4 w-6 h-6 cursor-pointer"
+            onClick={onClose}
+          />
         </div>
+
         <EventCard description={description} />
         <EventInfo price={price} restrictions={restrictions} />
 
         <div className="flex flex-row gap-2 w-full justify-center">
-          <Button onClick={() => handleRegister()} variant={going ? "success" : "secondary"}>
+          <Button
+            className="w-28 justify-center"
+            onClick={() => handleRegister()}
+            variant={going ? "success" : "secondary"}
+          >
             {going ? "Registered" : "Register"}
           </Button>
-          <Button onClick={() => handleSave()} variant={saved ? "success" : "secondary"}>
-            
+          <Button
+            className="w-28 justify-center"
+            onClick={() => handleSave()}
+            variant={saved ? "success" : "secondary"}
+          >
             {saved ? "Saved" : "Save"}
-            <FontAwesomeIcon icon={faBookmark}/>
+            <FontAwesomeIcon icon={faBookmark} />
           </Button>
-          <Button onClick={() => handleReport()} variant="danger">
-            
+          <Button
+            className="w-28 justify-center"
+            onClick={() => handleReport()}
+            variant="danger"
+          >
             {reported ? "Reported" : "Report"}
-            <FontAwesomeIcon icon={faFlag}/>
+            <FontAwesomeIcon icon={faFlag} />
           </Button>
         </div>
       </div>
     </div>
   );
 }
-
-

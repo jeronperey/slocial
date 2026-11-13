@@ -6,7 +6,7 @@ import { PagePlaceholder } from "../components/Placeholder";
 // TODO: build this page.
 export function MapPage() {
   const [open, setOpen] = useState(true);
-  
+
   return (
     <div>
       <PagePlaceholder
@@ -15,7 +15,9 @@ export function MapPage() {
       />
       <EventPopup
         isOpen={open}
-        onClose={() => {setOpen(false)}}
+        onClose={() => {
+          setOpen(false);
+        }}
         categories={["casual"]}
         name="Corgi Meetup"
         date="Saturday October 14th"

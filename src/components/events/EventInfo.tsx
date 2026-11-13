@@ -1,6 +1,3 @@
-
-
-
 interface EventInfoProps {
   price?: string;
   restrictions?: string;
@@ -20,8 +17,6 @@ export function EventInfo({ price, restrictions }: EventInfoProps) {
         <h3 className="">Restrictions : </h3>
         {restrictions ? <p>{restrictions}</p> : <p>None</p>}
       </div>
-      
-        
     </div>
   );
 }

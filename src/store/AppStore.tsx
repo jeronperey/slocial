@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  createContext,
-  useContext,
-  useState,
-  type ReactNode,
-} from "react";
+import { createContext, useContext, useState, type ReactNode } from "react";
 import type { Category } from "../data/types";
 
 /**
@@ -17,14 +12,13 @@ import type { Category } from "../data/types";
  * We will not use this now but we might ant this for later
  */
 
-
 type Event = {
-    name: string;
-    categories: Category[];
-    date: string;
-    time?: string;
-    location: string;
-}
+  name: string;
+  categories: Category[];
+  date: string;
+  time?: string;
+  location: string;
+};
 interface AppStore {
   registeredEvents: Event[];
   savedEvents: Event[];
@@ -37,7 +31,6 @@ interface AppStore {
   unreportEvent: (eventName: string) => void;
 }
 
-
 const AppStoreContext = createContext<AppStore | undefined>(undefined);
 
 export function AppStoreProvider({ children }: { children: ReactNode }) {
@@ -48,7 +41,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
   function registerForEvent(event: Event) {
     setRegisteredEvents((currentEvents) => {
       const alreadyRegistered = currentEvents.some(
-        (currentEvent) => currentEvent.name === event.name
+        (currentEvent) => currentEvent.name === event.name,
       );
 
       return alreadyRegistered ? currentEvents : [...currentEvents, event];
@@ -58,7 +51,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
   function saveEvent(event: Event) {
     setSavedEvents((currentEvents) => {
       const alreadySaved = currentEvents.some(
-        (currentEvent) => currentEvent.name === event.name
+        (currentEvent) => currentEvent.name === event.name,
       );
 
       return alreadySaved ? currentEvents : [...currentEvents, event];
@@ -68,29 +61,28 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
   function reportEvent(event: Event) {
     setReportedEvents((currentEvents) => {
       const alreadyReported = currentEvents.some(
-        (currentEvent) => currentEvent.name === event.name
+        (currentEvent) => currentEvent.name === event.name,
       );
-      
+
       return alreadyReported ? currentEvents : [...currentEvents, event];
     });
   }
 
   function unregisterFromEvent(eventName: string) {
     setRegisteredEvents((currentEvents) =>
-      currentEvents.filter((event) => event.name !== eventName)
+      currentEvents.filter((event) => event.name !== eventName),
     );
   }
   function unsaveEvent(eventName: string) {
     setSavedEvents((currentEvents) =>
-      currentEvents.filter((event) => event.name !== eventName)
+      currentEvents.filter((event) => event.name !== eventName),
     );
   }
   function unreportEvent(eventName: string) {
     setReportedEvents((currentEvents) =>
-      currentEvents.filter((event) => event.name !== eventName)
+      currentEvents.filter((event) => event.name !== eventName),
     );
   }
-
 
   return (
     <AppStoreContext.Provider
@@ -104,7 +96,6 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
         unsaveEvent,
         reportEvent,
         unreportEvent,
-        
       }}
     >
       {children}
@@ -112,7 +103,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
   );
 }
 
-  export function useAppStore() {
+export function useAppStore() {
   const store = useContext(AppStoreContext);
 
   if (!store) {
@@ -121,5 +112,3 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
 
   return store;
 }
-
-
