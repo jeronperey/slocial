@@ -5,7 +5,8 @@ import { Radio } from '../ui/Radio'
 import { SectionLabel } from '../ui/SectionLabel'
 import { CATEGORIES, DEFAULT_FILTERS, RADIUS_OPTIONS, toggleCategory, type Filters } from './filterLogic'
 
-// Drop-down sheet: Category / Location radius / Other, with Apply.
+// Drop-down sheet: Category / Location radius, with Apply.
+// Render it inside the (relative) map container so it drops down from just under the FilterBar.
 // Edits a draft copy; nothing changes on the map until Apply is pressed.
 
 interface FilterPanelProps {
@@ -20,7 +21,7 @@ export function FilterPanel({ filters, onApply }: FilterPanelProps) {
     <div
       role="dialog"
       aria-label="Filters"
-      className="absolute inset-x-0 top-0 z-20 max-h-full overflow-y-auto rounded-b-[20px] border-b border-line bg-surface px-4 pt-1 pb-4 shadow-[0_12px_30px_rgba(0,0,0,0.45)]"
+      className="absolute inset-x-0 top-0 z-[1000] max-h-full overflow-y-auto rounded-b-[20px] border-b border-line bg-surface px-4 pb-3 shadow-[0_12px_30px_rgba(0,0,0,0.45)]"
     >
       <SectionLabel>Category</SectionLabel>
       <div className="grid grid-cols-2 gap-x-4">
@@ -35,21 +36,21 @@ export function FilterPanel({ filters, onApply }: FilterPanelProps) {
       </div>
 
       <SectionLabel>Location radius</SectionLabel>
-      {RADIUS_OPTIONS.map(({ value, label }) => (
-        <Radio
-          key={label}
-          name="radius"
-          label={label}
-          checked={draft.radiusMiles === value}
-          onChange={() => setDraft({ ...draft, radiusMiles: value })}
-        />
-      ))}
+      <div className="grid grid-cols-2 gap-x-4">
+        {RADIUS_OPTIONS.map(({ value, label }) => (
+          <Radio
+            key={label}
+            name="radius"
+            label={label}
+            checked={draft.radiusMiles === value}
+            onChange={() => setDraft({ ...draft, radiusMiles: value })}
+          />
+        ))}
+      </div>
 
-      <SectionLabel>Other</SectionLabel>
-      <Checkbox label="Free events only" checked={draft.freeOnly} onChange={(freeOnly) => setDraft({ ...draft, freeOnly })} />
-      <Checkbox label="Happening today" checked={draft.todayOnly} onChange={(todayOnly) => setDraft({ ...draft, todayOnly })} />
+      {/* "Other" (free only, happening today) returns once events have a price and a date. */}
 
-      <div className="mt-4 flex gap-2">
+      <div className="mt-3 flex gap-2">
         <Button variant="secondary" onClick={() => setDraft(DEFAULT_FILTERS)}>
           Clear
         </Button>
