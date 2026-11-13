@@ -1,4 +1,5 @@
 import L from 'leaflet'
+import '@fortawesome/fontawesome-free/css/all.min.css'
 import { Marker } from 'react-leaflet'
 import type { SlocialEvent, Category } from '../../data/types'
 
@@ -11,19 +12,27 @@ const COLORS: Record<Category, string> = {
   casual: '#60a5fa',
 }
 
-// have colors for each cat, and icons for each
+// Font Awesome icon for each category
+const ICONS: Record<Category, string> = {
+  casual: 'fa-user-group',
+  sports: 'fa-person-running',
+  music: 'fa-music',
+  movie: 'fa-video',
+  party: 'fa-champagne-glasses',
+}
 
 // Category pin on the map; tap to open the event popup.
-// TODO: build this component.
-
 function pinIcon(category: Category, selected: boolean) {
-  const size = selected ? 34 : 26
+  const size = selected ? 40 : 32
   return L.divIcon({
     className: '',
-    html: `<div style="width:${size}px;height:${size}px;border-radius:50% 50% 50% 0;
-    transform:rotate(-45deg);background:${COLORS[category]};border:2px solid #fff;"></div>`,
+    // teardrop is rotated -45deg, so the icon is rotated back 45deg to stay upright
+    html: `<div style="width:${size}px;height:${size}px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:${COLORS[category]};border:2px solid #fff;display:flex;align-items:center;justify-content:center;color:#fff;">
+      <i class="fa-solid ${ICONS[category]}" style="transform:rotate(45deg);"></i>
+    </div>`,
     iconSize: [size, size],
-    iconAnchor: [size / 2, size],
+    // the tip of the teardrop sits below the box, so anchor it there
+    iconAnchor: [size / 2, size * 1.2],
   })
 }
 
