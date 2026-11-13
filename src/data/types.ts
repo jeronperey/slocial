@@ -1,9 +1,11 @@
 export type Category = "music" | "sports" | "party" | "movie" | "casual";
 
 export interface SlocialEvent {
-  id: string;
-  title: string;
-  category: Category;
+  id: string
+  title: string
+  category: Category
+  lat: number
+  lng: number
   // TODO: date, time, address, description, price, restrictions, map position…
 }
 
