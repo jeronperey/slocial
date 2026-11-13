@@ -120,14 +120,14 @@ export function EventPopup({
           <Button
             className="w-28 justify-center"
             onClick={() => handleRegister()}
-            variant={going ? "success" : "secondary"}
+            variant={going ? "successBorder" : "clear"}
           >
             {going ? "Registered" : "Register"}
           </Button>
           <Button
             className="w-28 justify-center"
             onClick={() => handleSave()}
-            variant={saved ? "success" : "secondary"}
+            variant={saved ? "successBorder" : "clear"}
           >
             {saved ? "Saved" : "Save"}
             <FontAwesomeIcon icon={faBookmark} />

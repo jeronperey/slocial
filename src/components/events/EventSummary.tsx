@@ -45,7 +45,7 @@ export function EventSummary({
                 <span>{location}</span>
               </div>
             </div>
-            <Button size="sm" variant="secondary">
+            <Button size="sm" variant="clear">
               Directions
               <FontAwesomeIcon icon={faArrowRight} />
             </Button>

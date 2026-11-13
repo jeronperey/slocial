@@ -2,7 +2,7 @@ import type { ButtonHTMLAttributes } from "react";
 
 // Primary / secondary / ghost / danger / success button variants.
 
-type Variant = "primary" | "secondary" | "ghost" | "danger" | "success";
+type Variant = "primary" | "secondary" | "ghost" | "danger" | "success" | "clear" | "successBorder";
 type Size = "md" | "sm" | "icon";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -18,6 +18,9 @@ const VARIANTS: Record<Variant, string> = {
   ghost: "text-muted hover:text-ink",
   danger: "border-[1.5px] border-danger/55 text-danger hover:bg-danger/10",
   success: "bg-ok/15 text-ok",
+  clear : "border-[1.5px] border-white/55 text-ink hover:bg-white/10",
+  successBorder: "border-[1.5px] bg-ok/15 text-ok border-ok/55",
+
 };
 
 const SIZES: Record<Size, string> = {
