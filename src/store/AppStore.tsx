@@ -22,16 +22,25 @@ type Event = {
   price?: number;
   restrictions?: string;
 };
+
+export type ReportReason = "Illegal Substances" | "Fraud" | "Bullying/Harrassment";
+
+export interface EventReport {
+  event: Event;
+  reasons: ReportReason[];
+  additionalInfo: string;
+}
+
 interface AppStore {
   registeredEvents: Event[];
   savedEvents: Event[];
   reportedEvents: Event[];
+  reports: EventReport[];
   registerForEvent: (event: Event) => void;
   saveEvent: (event: Event) => void;
-  reportEvent: (event: Event) => void;
+  submitReport: (event: Event, reasons: ReportReason[], additionalInfo: string) => void;
   unregisterFromEvent: (eventName: string) => void;
   unsaveEvent: (eventName: string) => void;
-  unreportEvent: (eventName: string) => void;
 }
 
 const AppStoreContext = createContext<AppStore | undefined>(undefined);
@@ -40,6 +49,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
   const [registeredEvents, setRegisteredEvents] = useState<Event[]>([]);
   const [savedEvents, setSavedEvents] = useState<Event[]>([]);
   const [reportedEvents, setReportedEvents] = useState<Event[]>([]);
+  const [reports, setReports] = useState<EventReport[]>([]);
 
   function registerForEvent(event: Event) {
     setRegisteredEvents((currentEvents) => {
@@ -61,14 +71,16 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
     });
   }
 
-  function reportEvent(event: Event) {
+  function submitReport(event: Event, reasons: ReportReason[], additionalInfo: string) {
+    // store one report per event .. tho in reality multiple users should be able to report, this is easier for now since we aren't dealing with multiple concurrent users
     setReportedEvents((currentEvents) => {
-      const alreadyReported = currentEvents.some(
-        (currentEvent) => currentEvent.name === event.name,
-      );
-
+      const alreadyReported = currentEvents.some((currentEvent) => currentEvent.name === event.name);
       return alreadyReported ? currentEvents : [...currentEvents, event];
     });
+    setReports((currentReports) => [
+      ...currentReports.filter((report) => report.event.name !== event.name),
+      { event, reasons, additionalInfo },
+    ]);
   }
 
   function unregisterFromEvent(eventName: string) {
@@ -81,24 +93,18 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
       currentEvents.filter((event) => event.name !== eventName),
     );
   }
-  function unreportEvent(eventName: string) {
-    setReportedEvents((currentEvents) =>
-      currentEvents.filter((event) => event.name !== eventName),
-    );
-  }
-
   return (
     <AppStoreContext.Provider
       value={{
         registeredEvents,
         savedEvents,
         reportedEvents,
+        reports,
         registerForEvent,
         unregisterFromEvent,
         saveEvent,
         unsaveEvent,
-        reportEvent,
-        unreportEvent,
+        submitReport,
       }}
     >
       {children}

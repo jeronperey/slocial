@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router";
+import { Route, Routes, useLocation, type Location } from "react-router";
 import { PhoneFrame } from "./components/layout/PhoneFrame";
 import { TabLayout } from "./components/layout/TabLayout";
 import { DirectionsPage } from "./pages/DirectionsPage";
@@ -12,9 +12,13 @@ import { ReportEventPage } from "./pages/ReportEventPage";
 import { UiKitPage } from "./pages/UiKitPage";
 
 export default function App() {
+  const location = useLocation(); // to track where on the page you are
+  const routeState = location.state as { backgroundLocation?: Location } | null;
+  const backgroundLocation = routeState?.backgroundLocation;
+
   return (
     <PhoneFrame>
-      <Routes>
+      <Routes location={backgroundLocation || location}>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/ui" element={<UiKitPage />} />
 
@@ -28,6 +32,11 @@ export default function App() {
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>
+      {backgroundLocation && (
+        <Routes>
+          <Route path="/events/:id/report" element={<ReportEventPage />} />
+        </Routes>
+      )}
     </PhoneFrame>
   );
 }

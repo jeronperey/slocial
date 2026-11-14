@@ -35,7 +35,7 @@ export function MapPage() {
           setOpenPopup(false);
         }}
         categories={popup.category}
-        name={popup.id}
+        name={popup.title}
         date={popup.date}
         time={popup.time}
         location={popup.address}

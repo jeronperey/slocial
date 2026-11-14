@@ -2,7 +2,6 @@ import { EventCard } from "./EventCard";
 import { EventSummary } from "./EventSummary";
 import { EventInfo } from "./EventInfo";
 import type { Category } from "../../data/types";
-import { useState } from "react";
 import { Button } from "../ui/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons/faXmark";
@@ -10,8 +9,8 @@ import { useAppStore } from "../../store/AppStore";
 import { faFlag } from "@fortawesome/free-solid-svg-icons/faFlag";
 import { faBookmark } from "@fortawesome/free-solid-svg-icons/faBookmark";
 import { googleMapsLink } from "../map/mapLinks";
+import { useLocation, useNavigate } from "react-router";
 
-// Modal over the map: summary, description, info, Register / Save / Report.
 // TODO: build this component.
 interface EventPopupProps {
   categories: Category;
@@ -42,17 +41,21 @@ export function EventPopup({
   lat,
   lng,
 }: EventPopupProps) {
-  const [going, setGoing] = useState(false);
-  const [saved, setSaved] = useState(false);
-  const [reported, setReported] = useState(false);
+  const navigate = useNavigate();
+  const currentLocation = useLocation();
   const {
+    registeredEvents,
+    savedEvents,
+    reportedEvents,
     registerForEvent,
     unregisterFromEvent,
     saveEvent,
     unsaveEvent,
-    reportEvent,
-    unreportEvent,
   } = useAppStore();
+  const going = registeredEvents.some((event) => event.name === name);
+  const saved = savedEvents.some((event) => event.name === name);
+  const reported = reportedEvents.some((event) => event.name === name);
+
   function handleRegister() {
     if (!going) {
       registerForEvent({
@@ -61,13 +64,13 @@ export function EventPopup({
         date,
         time,
         location,
+        description,
         price,
         restrictions
       });
     } else {
       unregisterFromEvent(name);
     }
-    setGoing(!going);
   }
 
   function handleSave() {
@@ -78,30 +81,34 @@ export function EventPopup({
         date,
         time,
         location,
+        description,
         price,
         restrictions
       });
     } else {
       unsaveEvent(name);
     }
-    setSaved(!saved);
   }
 
   function handleReport() {
-    if (!reported) {
-      reportEvent({
+    // open the report form over this popup and pass the event plus return location.
+    navigate(`/events/${encodeURIComponent(name)}/report`, {
+      state: {
+        backgroundLocation: currentLocation,
+        event: {
         name,
         categories,
         date,
         time,
         location,
+        description,
         price,
-        restrictions
-      });
-    } else {
-      unreportEvent(name);
-    }
-    setReported(!reported);
+        restrictions,
+        lat,
+        lng,
+        },
+      },
+    });
   }
   if (!isOpen) return null;
 
@@ -148,9 +155,10 @@ export function EventPopup({
             <FontAwesomeIcon icon={faBookmark} />
           </Button>
           <Button
-            className="w-28 justify-center"
+            className={`w-28 justify-center ${reported ? "bg-danger/15 border-danger" : ""}`}
             onClick={() => handleReport()}
             variant="danger"
+            aria-pressed={reported}
           >
             {reported ? "Reported" : "Report"}
             <FontAwesomeIcon icon={faFlag} />
