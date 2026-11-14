@@ -13,13 +13,13 @@ import { faBookmark } from "@fortawesome/free-solid-svg-icons/faBookmark";
 // Modal over the map: summary, description, info, Register / Save / Report.
 // TODO: build this component.
 interface EventPopupProps {
-  categories: Category[];
+  categories: Category;
   name: string;
   date: string;
   time?: string;
   location: string;
   description?: string;
-  price?: string;
+  price?: number;
   restrictions?: string;
   isOpen: boolean;
   onClose: () => void;
@@ -56,6 +56,8 @@ export function EventPopup({
         date,
         time,
         location,
+        price,
+        restrictions
       });
     } else {
       unregisterFromEvent(name);
@@ -71,6 +73,8 @@ export function EventPopup({
         date,
         time,
         location,
+        price,
+        restrictions
       });
     } else {
       unsaveEvent(name);
@@ -86,6 +90,8 @@ export function EventPopup({
         date,
         time,
         location,
+        price,
+        restrictions
       });
     } else {
       unreportEvent(name);
@@ -95,8 +101,8 @@ export function EventPopup({
   if (!isOpen) return null;
 
   return (
-    <div className=" slocial-fade-up  fixed z-50 inset-0 backdrop-blur-sm flex items-center flex-col p-4 justify-center">
-      <div className="flex flex-col gap-4 rounded-xl bg-line p-8 relative">
+    <div className=" slocial-fade-up fixed z-50 inset-0 backdrop-blur-sm flex items-center flex-col p-4 justify-center">
+      <div className="flex flex-col gap-4 rounded-xl bg-line p-8 relative w-[25rem] max-w-full">
         <div>
           <EventSummary
             name={name}
@@ -104,7 +110,6 @@ export function EventPopup({
             time={time}
             location={location}
             categories={categories}
-            going={going}
           />
           <FontAwesomeIcon
             icon={faXmark}

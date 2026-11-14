@@ -13,11 +13,14 @@ import type { Category } from "../data/types";
  */
 
 type Event = {
+  categories: Category;
   name: string;
-  categories: Category[];
   date: string;
   time?: string;
   location: string;
+  description?: string;
+  price?: number;
+  restrictions?: string;
 };
 interface AppStore {
   registeredEvents: Event[];

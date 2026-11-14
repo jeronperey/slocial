@@ -6,6 +6,12 @@ export interface SlocialEvent {
   category: Category
   lat: number
   lng: number
+  date: string
+  address : string
+  description?: string
+  restrictions?: string
+  time?: string,
+  price? : number
   // TODO: date, time, address, description, price, restrictions, map position…
 }
 

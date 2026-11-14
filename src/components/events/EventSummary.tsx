@@ -6,12 +6,12 @@ import type { Category } from "../../data/types";
 import { Tag, GoingPill } from "../ui/Tag";
 import { Button } from "../ui/Button";
 
+
 // Event icon + title + date/time + address.
 // TODO: build this component.
 interface EventSummaryProps {
   name: string;
-  categories: Category[];
-  going: boolean;
+  categories: Category;
   date: string;
   time?: string;
   location: string;
@@ -23,7 +23,6 @@ export function EventSummary({
   time,
   location,
   categories,
-  going,
 }: EventSummaryProps) {
   return (
     <div className=" p-2 w-full">
@@ -51,12 +50,10 @@ export function EventSummary({
             </Button>
           </div>
 
-          <div className="flex flex-wrap gap-2 mt-2 text-lg">
-            {categories.map((category) => (
-              <Tag key={category} category={category} />
-            ))}
+          <div className="text-lg">
+            <Tag key = {categories} category = {categories}/>
           </div>
-          <div className="flex w-full justify-end"></div>
+          
         </div>
       </div>
     </div>

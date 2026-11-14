@@ -10,7 +10,7 @@ export function EventCard({ description }: EventCardProps) {
       {description && (
         <div className="flex flex-col gap-1 mt-2 ">
           <h2 className="border-b border-gray-300 pb-2">Description</h2>
-          <p>{description}</p>
+          <p className="whitespace-normal break-words">{description}</p>
         </div>
       )}
     </div>

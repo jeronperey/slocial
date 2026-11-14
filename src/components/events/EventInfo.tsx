@@ -1,5 +1,5 @@
 interface EventInfoProps {
-  price?: string;
+  price?: number;
   restrictions?: string;
 }
 

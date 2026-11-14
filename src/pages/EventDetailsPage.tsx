@@ -13,7 +13,7 @@ export function EventDetailsPage() {
         onClose={() => {
           setOpen(false);
         }}
-        categories={["casual"]}
+        categories={"casual"}
         name="Corgi Meetup"
         date="Saturday October 14th"
         time="11:00 AM"

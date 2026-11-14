@@ -5,18 +5,45 @@ import {DEFAULT_FILTERS, filterEvents, type Filters } from '../components/events
 import { FilterBar } from '../components/events/FilterBar'
 import { AppHeader } from '../components/layout/AppHeader'
 import { FilterPanel } from '../components/events/FilterPanel'
-
+import type { SlocialEvent } from "../data/types";
+import { EventPopup } from '../components/events/EventPopup'
 
 // Home screen: map of nearby events with filters and an event popup (register, save, report).
 // TODO: build this page.
 export function MapPage() {
   const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS)
   const [panelOpen, setPanelOpen] = useState(false)
+  const [openPopup, setOpenPopup] = useState(false)
+  const [popup, setPopup] = useState<SlocialEvent | undefined>()
   const [selectedId, setSelectedId] = useState<string | undefined>()
   const visibleEvents = filterEvents(EVENTS, filters, YOU_POSITION)
+  
+  function handleSelectEvent(id: string) {
+    const selectedEvent = EVENTS.find((event) => event.id === id)
+    setOpenPopup(true)
+    setPopup(selectedEvent)
+    setSelectedId(id)
+  }
 
   return (
+    
     <div className="relative flex h-full w-full flex-col">
+      {popup && (
+        <EventPopup
+        isOpen={openPopup}
+        onClose={() => {
+          setOpenPopup(false);
+        }}
+        categories={popup.category}
+        name={popup.id}
+        date={popup.date}
+        time={popup.time}
+        location={popup.address}
+        description={popup.description}
+        price = {popup.price}
+        restrictions={popup.restrictions}
+      />
+      )}
       <AppHeader title="Events Around You"/>
       <FilterBar
         filters={filters}
@@ -29,7 +56,7 @@ export function MapPage() {
         <MapView
           events={visibleEvents}
           selectedEventId={selectedId}
-          onSelectEvent={setSelectedId}
+          onSelectEvent={handleSelectEvent}
         />
 
         {visibleEvents.length === 0 && (
@@ -47,6 +74,7 @@ export function MapPage() {
             }}
           />
         )}
+        
       </div>
     </div>
   )
