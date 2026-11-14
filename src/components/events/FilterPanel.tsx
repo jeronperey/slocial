@@ -1,21 +1,27 @@
-import { useState } from 'react'
-import { Button } from '../ui/Button'
-import { Checkbox } from '../ui/Checkbox'
-import { Radio } from '../ui/Radio'
-import { SectionLabel } from '../ui/SectionLabel'
-import { CATEGORIES, DEFAULT_FILTERS, RADIUS_OPTIONS, toggleCategory, type Filters } from './filterLogic'
+import { useState } from "react";
+import { Button } from "../ui/Button";
+import { Checkbox } from "../ui/Checkbox";
+import { Radio } from "../ui/Radio";
+import { SectionLabel } from "../ui/SectionLabel";
+import {
+  CATEGORIES,
+  DEFAULT_FILTERS,
+  RADIUS_OPTIONS,
+  toggleCategory,
+  type Filters,
+} from "./filterLogic";
 
 // Drop-down sheet: Category / Location radius, with Apply.
 // Render it inside the (relative) map container so it drops down from just under the FilterBar.
 // Edits a draft copy; nothing changes on the map until Apply is pressed.
 
 interface FilterPanelProps {
-  filters: Filters
-  onApply: (filters: Filters) => void
+  filters: Filters;
+  onApply: (filters: Filters) => void;
 }
 
 export function FilterPanel({ filters, onApply }: FilterPanelProps) {
-  const [draft, setDraft] = useState<Filters>(filters)
+  const [draft, setDraft] = useState<Filters>(filters);
 
   return (
     <div
@@ -59,5 +65,5 @@ export function FilterPanel({ filters, onApply }: FilterPanelProps) {
         </Button>
       </div>
     </div>
-  )
+  );
 }

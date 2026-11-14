@@ -1,18 +1,28 @@
-import { SlidersHorizontalIcon } from 'lucide-react'
-import { Chip } from '../ui/Chip'
-import { CATEGORIES, countActiveFilters, toggleCategory, type Filters } from './filterLogic'
+import { SlidersHorizontalIcon } from "lucide-react";
+import { Chip } from "../ui/Chip";
+import {
+  CATEGORIES,
+  countActiveFilters,
+  toggleCategory,
+  type Filters,
+} from "./filterLogic";
 
 // 'Filters' button + quick category chips under the header.
 
 interface FilterBarProps {
-  filters: Filters
-  onChange: (filters: Filters) => void
-  onOpenPanel: () => void
-  panelOpen?: boolean
+  filters: Filters;
+  onChange: (filters: Filters) => void;
+  onOpenPanel: () => void;
+  panelOpen?: boolean;
 }
 
-export function FilterBar({ filters, onChange, onOpenPanel, panelOpen = false }: FilterBarProps) {
-  const active = countActiveFilters(filters)
+export function FilterBar({
+  filters,
+  onChange,
+  onOpenPanel,
+  panelOpen = false,
+}: FilterBarProps) {
+  const active = countActiveFilters(filters);
 
   return (
     <div className="flex shrink-0 items-center gap-2 bg-surface px-4 pb-3">
@@ -42,5 +52,5 @@ export function FilterBar({ filters, onChange, onOpenPanel, panelOpen = false }:
         ))}
       </div>
     </div>
-  )
+  );
 }

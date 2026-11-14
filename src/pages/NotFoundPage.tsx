@@ -1,4 +1,4 @@
-import { Link } from 'react-router'
+import { Link } from "react-router";
 
 export function NotFoundPage() {
   return (
@@ -8,5 +8,5 @@ export function NotFoundPage() {
         Back to the map
       </Link>
     </div>
-  )
+  );
 }
