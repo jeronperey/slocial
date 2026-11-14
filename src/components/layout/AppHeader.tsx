@@ -25,7 +25,7 @@ export function AppHeader({ title, back = false }: AppHeaderProps) {
           type="button"
           aria-label="Back"
           onClick={goBack}
-          className="-ml-1.5 flex size-8 cursor-pointer items-center justify-center rounded-lg text-ink focus-visible:outline-2 focus-visible:outline-primary"
+          className="-ml-1.5 flex size-8 cursor-pointer items-center justify-center font-title rounded-lg text-ink focus-visible:outline-2 focus-visible:outline-primary"
         >
           <ChevronLeftIcon size={22} />
         </button>
