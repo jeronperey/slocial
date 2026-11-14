@@ -39,6 +39,8 @@ export function MapPage() {
         date={popup.date}
         time={popup.time}
         location={popup.address}
+        lat={popup.lat}
+        lng={popup.lng}
         description={popup.description}
         price = {popup.price}
         restrictions={popup.restrictions}

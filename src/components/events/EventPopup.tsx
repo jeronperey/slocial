@@ -9,6 +9,7 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons/faXmark";
 import { useAppStore } from "../../store/AppStore";
 import { faFlag } from "@fortawesome/free-solid-svg-icons/faFlag";
 import { faBookmark } from "@fortawesome/free-solid-svg-icons/faBookmark";
+import { googleMapsLink } from "../map/mapLinks";
 
 // Modal over the map: summary, description, info, Register / Save / Report.
 // TODO: build this component.
@@ -22,6 +23,8 @@ interface EventPopupProps {
   price?: number;
   restrictions?: string;
   isOpen: boolean;
+  lat: number;
+  lng: number;
   onClose: () => void;
 }
 
@@ -36,6 +39,8 @@ export function EventPopup({
   description,
   price,
   restrictions,
+  lat,
+  lng,
 }: EventPopupProps) {
   const [going, setGoing] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -100,6 +105,10 @@ export function EventPopup({
   }
   if (!isOpen) return null;
 
+  function handleDirections() {
+    window.open(googleMapsLink({ lat, lng }), "_blank");
+  }
+
   return (
     <div className=" slocial-fade-up fixed z-50 inset-0 backdrop-blur-sm flex items-center flex-col p-4 justify-center">
       <div className="flex flex-col gap-4 rounded-xl bg-line p-8 relative w-[25rem] max-w-full">
@@ -110,6 +119,7 @@ export function EventPopup({
             time={time}
             location={location}
             categories={categories}
+            onDirections={handleDirections}
           />
           <FontAwesomeIcon
             icon={faXmark}

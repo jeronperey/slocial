@@ -18,6 +18,8 @@ export function EventDetailsPage() {
         date="Saturday October 14th"
         time="11:00 AM"
         location="Central Park"
+        lat={35.2803}
+        lng={-120.6631}
         description="Join us for a fun day of corgi activities!"
       />
   );

@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPeopleGroup } from "@fortawesome/free-solid-svg-icons/faPeopleGroup";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import type { Category } from "../../data/types";
-import { Tag, GoingPill } from "../ui/Tag";
+import { Tag } from "../ui/Tag";
 import { Button } from "../ui/Button";
 
 
@@ -15,6 +15,7 @@ interface EventSummaryProps {
   date: string;
   time?: string;
   location: string;
+  onDirections: () => void;
 }
 
 export function EventSummary({
@@ -23,6 +24,7 @@ export function EventSummary({
   time,
   location,
   categories,
+  onDirections,
 }: EventSummaryProps) {
   return (
     <div className=" p-2 w-full">
@@ -44,7 +46,7 @@ export function EventSummary({
                 <span>{location}</span>
               </div>
             </div>
-            <Button size="sm" variant="clear">
+            <Button size="sm" variant="clear" onClick={onDirections}>
               Directions
               <FontAwesomeIcon icon={faArrowRight} />
             </Button>
