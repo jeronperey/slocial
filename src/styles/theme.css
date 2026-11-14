@@ -5,15 +5,15 @@
  */
 :root {
   /* Surfaces */
-  --bg: #0f1012;          /* app background */
-  --surface: #18191c;     /* header, nav, cards, sheets */
-  --raised: #222327;      /* inputs, info tiles, chips */
-  --soft: #2a2b30;        /* icon tiles, tags */
-  --line: #2c2d32;        /* borders + dividers */
+  --bg: #0f1012; /* app background */
+  --surface: #18191c; /* header, nav, cards, sheets */
+  --raised: #222327; /* inputs, info tiles, chips */
+  --soft: #2a2b30; /* icon tiles, tags */
+  --line: #2c2d32; /* borders + dividers */
 
   /* Text */
-  --ink: #ededef;         /* primary text */
-  --muted: #9a9ba1;       /* secondary text */
+  --ink: #ededef; /* primary text */
+  --muted: #9a9ba1; /* secondary text */
 
   /* Brand / actions (placeholder until palette is chosen) */
   --primary: #ededef;
@@ -29,7 +29,7 @@
   --map-park: #1c211e;
   --map-water: #161c22;
   --map-block: #1b1c20;
-  --you: #8fb3ff;         /* "You are here" dot */
+  --you: #8fb3ff; /* "You are here" dot */
 
   /* Event categories (pins + icon tiles) */
   --cat-music: #b9b9c2;

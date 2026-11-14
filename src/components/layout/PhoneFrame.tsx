@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import type { ReactNode } from "react";
 
 export function PhoneFrame({ children }: { children: ReactNode }) {
   return (
@@ -7,5 +7,5 @@ export function PhoneFrame({ children }: { children: ReactNode }) {
         {children}
       </div>
     </div>
-  )
+  );
 }

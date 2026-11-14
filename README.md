@@ -1,6 +1,6 @@
 **CSC 4184 Project: Slocial**
 
-High-fidelity, front-end-only prototype of *Events Around You*. No backend — all data is mocked.
+High-fidelity, front-end-only prototype of _Events Around You_. No backend — all data is mocked.
 
 Design source: [Figma – Events Around You (Prototype v2)](https://www.figma.com/design/NpR69IhZiiOXjVUGr4c2z0/Events-Around-You-–-Paper-Prototype?node-id=100-5)
 
@@ -10,6 +10,7 @@ Design source: [Figma – Events Around You (Prototype v2)](https://www.figma.co
 npm install
 npm run dev      # http://localhost:5173
 npm run build    # type-check + production build
+npm run prettier # runs style
 npm run lint
 ```
 
@@ -46,12 +47,12 @@ src/
 
 ## Pages → Figma frames
 
-| Page | Route | Figma frames |
-|---|---|---|
-| LoginPage | `/login` | Login |
-| ProfilePage | `/profile` | Profile |
-| MapPage | `/` | Map – Home, Filter panel, Filter – Casual checked, Map – Casual filtered, Event popup – Corgi Meetup, Event popup – Registered |
-| MyEventsPage | `/events` | Events – Going & Saved |
-| EventDetailsPage | `/events/:id` | Event details – Corgi Meetup |
-| DirectionsPage | `/events/:id/directions` | Map – Directions |
-| ReportEventPage | `/events/:id/report` | Report event, Report event – Bullying checked, Report event – Submitted |
+| Page             | Route                    | Figma frames                                                                                                                   |
+| ---------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------ |
+| LoginPage        | `/login`                 | Login                                                                                                                          |
+| ProfilePage      | `/profile`               | Profile                                                                                                                        |
+| MapPage          | `/`                      | Map – Home, Filter panel, Filter – Casual checked, Map – Casual filtered, Event popup – Corgi Meetup, Event popup – Registered |
+| MyEventsPage     | `/events`                | Events – Going & Saved                                                                                                         |
+| EventDetailsPage | `/events/:id`            | Event details – Corgi Meetup                                                                                                   |
+| DirectionsPage   | `/events/:id/directions` | Map – Directions                                                                                                               |
+| ReportEventPage  | `/events/:id/report`     | Report event, Report event – Bullying checked, Report event – Submitted                                                        |

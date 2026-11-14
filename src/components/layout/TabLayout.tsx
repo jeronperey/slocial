@@ -1,5 +1,5 @@
-import { Outlet } from 'react-router'
-import { BottomNav } from './BottomNav'
+import { Outlet } from "react-router";
+import { BottomNav } from "./BottomNav";
 
 export function TabLayout() {
   return (
@@ -9,5 +9,5 @@ export function TabLayout() {
       </div>
       <BottomNav />
     </>
-  )
+  );
 }

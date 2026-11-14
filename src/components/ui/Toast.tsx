@@ -1,22 +1,22 @@
-import { useEffect } from 'react'
+import { useEffect } from "react";
 
 // Short confirmation message that hides itself ('Registered for Corgi Meetup').
 // Place it inside a `relative` container; it sits at the bottom of that container.
 
 interface ToastProps {
-  message: string | null
-  onDone: () => void
-  duration?: number
+  message: string | null;
+  onDone: () => void;
+  duration?: number;
 }
 
 export function Toast({ message, onDone, duration = 2500 }: ToastProps) {
   useEffect(() => {
-    if (!message) return
-    const timer = setTimeout(onDone, duration)
-    return () => clearTimeout(timer)
-  }, [message, onDone, duration])
+    if (!message) return;
+    const timer = setTimeout(onDone, duration);
+    return () => clearTimeout(timer);
+  }, [message, onDone, duration]);
 
-  if (!message) return null
+  if (!message) return null;
 
   return (
     <div
@@ -25,5 +25,5 @@ export function Toast({ message, onDone, duration = 2500 }: ToastProps) {
     >
       {message}
     </div>
-  )
+  );
 }
