@@ -39,9 +39,17 @@ export function ReportEventPage() {
   // get event details from event that was reported (which is in routeState.event)
   const routeState = location.state as ReportRouteState | null;
   const event = routeState?.event;
-  const { submitReport } = useAppStore();
-  const [selectedReasons, setSelectedReasons] = useState<ReportReason[]>([]);
-  const [additionalInfo, setAdditionalInfo] = useState("");
+  const { submitReport, reports } = useAppStore();
+  const existingReport = event
+    ? reports.find((report) => report.event.name === event.name)
+    : undefined;
+  const [selectedReasons, setSelectedReasons] = useState<ReportReason[]>(
+    existingReport?.reasons ?? [],
+  );
+  const [additionalInfo, setAdditionalInfo] = useState(
+    existingReport?.additionalInfo ?? "",
+  );
+  const [showEmptyReportError, setShowEmptyReportError] = useState(false);
 
   function handleBack() {
     if ((window.history.state?.idx ?? 0) > 0) {
@@ -61,12 +69,18 @@ export function ReportEventPage() {
     }
   }
 
+  const hasReportContent =
+    selectedReasons.length > 0 || additionalInfo.trim().length > 0;
+
   function handleSubmit(formEvent: FormEvent<HTMLFormElement>) {
     formEvent.preventDefault();
-    if (!event) return;
+    if (!event || !hasReportContent) {
+      setShowEmptyReportError(true);
+      return;
+    }
 
     // submit report then return back to popup u started at
-    submitReport(event, selectedReasons, additionalInfo);
+    submitReport(event, selectedReasons, additionalInfo.trim());
     handleBack();
   }
 
@@ -119,7 +133,7 @@ export function ReportEventPage() {
             >
               <ChevronLeftIcon size={22} />
             </button>
-            <h1 className="text-lg font-bold">Report event</h1>
+            <h1 className="text-lg font-bold">Report this event</h1>
           </header>
 
           <div className="mb-5 border-b border-gray-300 pb-4">
@@ -139,8 +153,8 @@ export function ReportEventPage() {
           </div>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-            <fieldset>
-              <legend className="mb-1 text-sm font-bold">Report event for</legend>
+            <div className="m-0 min-w-0 p-0">
+              <p className="mb-1 text-sm font-bold">Report event for:</p>
               {REPORT_REASONS.map((reason) => (
                 <Checkbox
                   key={reason}
@@ -149,7 +163,7 @@ export function ReportEventPage() {
                   onChange={(checked) => handleReasonChange(reason, checked)}
                 />
               ))}
-            </fieldset>
+            </div>
 
             <label className="flex flex-col gap-2 text-sm font-bold">
               Anything else to add?
@@ -161,11 +175,17 @@ export function ReportEventPage() {
               />
             </label>
 
+            {showEmptyReportError && !hasReportContent && (
+              <p className="text-center text-xs text-danger">
+                You cannot submit an empty report.
+              </p>
+            )}
+
             <button
               type="submit"
               className="mt-1 h-11 rounded-[14px] bg-primary px-4 text-sm font-bold text-on-primary hover:brightness-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
             >
-              Submit report
+              {existingReport ? "Update Report" : "Submit Report"}
             </button>
           </form>
         </section>

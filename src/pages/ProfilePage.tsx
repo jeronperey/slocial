@@ -1,21 +1,24 @@
 import { PencilIcon } from "lucide-react";
 import { useState } from "react";
+import { useLocation, useNavigate } from "react-router";
 import { AppHeader } from "../components/layout/AppHeader";
 import { Button } from "../components/ui/Button";
 import { TextInput } from "../components/ui/TextInput";
 import type { User } from "../data/types";
 import { DEFAULT_USER } from "../data/user";
+import { useAppStore } from "../store/AppStore";
 
 // Shows the user's info with an option to edit it.
 // TODO: move the user into AppStore so edits survive switching tabs.
-// TODO: replace the Going / Saved counts with real numbers from AppStore.
-const GOING_COUNT = 1;
-const SAVED_COUNT = 2;
 
 export function ProfilePage() {
   const [user, setUser] = useState<User>(DEFAULT_USER);
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState<User>(DEFAULT_USER);
+  const [showReports, setShowReports] = useState(false);
+  const { reports, registeredEvents, savedEvents } = useAppStore();
+  const navigate = useNavigate();
+  const currentLocation = useLocation();
 
   const initials = user.name
     .split(" ")
@@ -123,9 +126,78 @@ export function ProfilePage() {
               <PencilIcon size={15} /> Edit my information
             </Button>
 
+            <Button
+              variant="secondary"
+              fullWidth
+              className="mt-2"
+              onClick={() => setShowReports((current) => !current)}
+              aria-expanded={showReports}
+            >
+              {showReports ? "Hide my reports" : "View my reports"}
+            </Button>
+
+            {showReports && (
+              <section className="mt-3 flex flex-col gap-2">
+                {reports.length === 0 ? (
+                  <p className="rounded-2xl bg-surface p-4 text-center text-sm text-muted">
+                    You have not submitted any reports.
+                  </p>
+                ) : (
+                  reports.map((report) => (
+                    <article
+                      key={report.event.name}
+                      className="relative rounded-2xl bg-surface p-3.5 pr-12"
+                    >
+                      <button
+                        type="button"
+                        aria-label={`Edit report for ${report.event.name}`}
+                        className="absolute right-3 top-3 flex size-8 items-center justify-center rounded-lg text-muted hover:bg-raised hover:text-ink focus-visible:outline-2 focus-visible:outline-primary"
+                        onClick={() =>
+                          navigate(
+                            `/events/${encodeURIComponent(report.event.name)}/report`,
+                            {
+                              state: {
+                                backgroundLocation: currentLocation,
+                                event: {
+                                  ...report.event,
+                                  lat: 0,
+                                  lng: 0,
+                                },
+                              },
+                            },
+                          )
+                        }
+                      >
+                        <PencilIcon size={15} />
+                      </button>
+
+                      <h3 className="text-sm font-bold">{report.event.name}</h3>
+                      {report.reasons.length > 0 && (
+                        <div className="mt-2 flex flex-wrap gap-1">
+                          {report.reasons.map((reason) => (
+                            <span
+                              key={reason}
+                              className="rounded-full bg-danger/15 px-2 py-1 text-xs text-danger"
+                            >
+                              {reason}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                      {report.additionalInfo && (
+                        <p className="mt-2 text-sm text-muted">
+                          {report.additionalInfo}
+                        </p>
+                      )}
+                    </article>
+                  ))
+                )}
+              </section>
+            )}
+
             <div className="mt-4 grid grid-cols-2 gap-2">
-              <Stat value={GOING_COUNT} label="Going" />
-              <Stat value={SAVED_COUNT} label="Saved" />
+              <Stat value={registeredEvents.length} label="Going" />
+              <Stat value={savedEvents.length} label="Saved" />
             </div>
           </>
         )}

@@ -160,7 +160,7 @@ export function EventPopup({
             variant="danger"
             aria-pressed={reported}
           >
-            {reported ? "Reported" : "Report"}
+            {reported ? "See Report" : "Report"}
             <FontAwesomeIcon icon={faFlag} />
           </Button>
         </div>

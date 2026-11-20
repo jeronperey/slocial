@@ -78,8 +78,8 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
       return alreadyReported ? currentEvents : [...currentEvents, event];
     });
     setReports((currentReports) => [
-      ...currentReports.filter((report) => report.event.name !== event.name),
       { event, reasons, additionalInfo },
+      ...currentReports.filter((report) => report.event.name !== event.name),
     ]);
   }
 
