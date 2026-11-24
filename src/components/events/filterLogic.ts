@@ -21,6 +21,7 @@ export const RADIUS_OPTIONS: { value: Radius; label: string }[] = [
 ];
 
 export interface Filters {
+  query: string; // search text; empty = no search
   categories: Category[]; // empty = all categories
   radiusMiles: Radius;
   freeOnly: boolean;
@@ -28,34 +29,33 @@ export interface Filters {
 }
 
 export const DEFAULT_FILTERS: Filters = {
+  query: "",
   categories: [],
   radiusMiles: "any",
   freeOnly: false,
   todayOnly: false,
 };
 
-/**
- * Price and date are not on SlocialEvent yet. Once teammates add them, the free-only and
- * today-only filters start working (they are off in the panel until then). Events missing a
- * field are never hidden by it.
- */
-type FilterableEvent = SlocialEvent & {
-  price?: number | string
-  date?: string | Date
-}
-
 /** A point on the map: [latitude, longitude]. */
-export type LatLng = [number, number]
+export type LatLng = [number, number];
 
-const EARTH_RADIUS_MILES = 3958.8
+const EARTH_RADIUS_MILES = 3958.8;
 
 /** Straight-line distance between two points, in miles (haversine). */
 export function distanceMiles(a: LatLng, b: LatLng): number {
-  const rad = (deg: number) => (deg * Math.PI) / 180
-  const dLat = rad(b[0] - a[0])
-  const dLng = rad(b[1] - a[1])
-  const h = Math.sin(dLat / 2) ** 2 + Math.cos(rad(a[0])) * Math.cos(rad(b[0])) * Math.sin(dLng / 2) ** 2
-  return 2 * EARTH_RADIUS_MILES * Math.asin(Math.sqrt(h))
+  const rad = (deg: number) => (deg * Math.PI) / 180;
+  const dLat = rad(b[0] - a[0]);
+  const dLng = rad(b[1] - a[1]);
+  const h =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(rad(a[0])) * Math.cos(rad(b[0])) * Math.sin(dLng / 2) ** 2;
+  return 2 * EARTH_RADIUS_MILES * Math.asin(Math.sqrt(h));
+}
+
+/** Who is looking: where they are (for the radius) and how old they are (for age limits). */
+export interface FilterContext {
+  origin?: LatLng;
+  userAge?: number;
 }
 
 export function countActiveFilters(f: Filters): number {
@@ -74,24 +74,45 @@ export function toggleCategory(f: Filters, category: Category): Filters {
   return { ...f, categories };
 }
 
-function isFree(price: number | string): boolean {
-  return price === 0 || price === "Free";
+/** The minimum age in a restriction like "21+" or "21+, Cal Poly Students Only"; null if none. */
+export function minimumAge(restrictions?: string): number | null {
+  const match = restrictions?.match(/(\d{2})\s*\+/);
+  return match ? Number(match[1]) : null;
 }
 
-function isToday(date: string | Date): boolean {
-  return new Date(date).toDateString() === new Date().toDateString();
+function matchesQuery(event: SlocialEvent, query: string): boolean {
+  const q = query.trim().toLowerCase();
+  if (!q) return true;
+  return [event.title, event.address, event.description, event.category]
+    .filter(Boolean)
+    .some((text) => text!.toLowerCase().includes(q));
 }
 
-/** `origin` is where the user is; without it the radius filter is skipped. */
-export function matchesFilters(event: SlocialEvent, f: Filters, origin?: LatLng): boolean {
-  const e = event as FilterableEvent
-  if (f.categories.length > 0 && !f.categories.includes(e.category)) return false
-  if (f.radiusMiles !== 'any' && origin && distanceMiles(origin, [e.lat, e.lng]) > f.radiusMiles) return false
-  if (f.freeOnly && e.price !== undefined && !isFree(e.price)) return false
-  if (f.todayOnly && e.date !== undefined && !isToday(e.date)) return false
-  return true
+// Free-only and today-only are not in the panel yet: dates are free text ("Thursday November
+// 19th"), not real dates, so "today" cannot be worked out. Free-only treats no price as free.
+function isFree(price?: number): boolean {
+  return price === undefined || price === 0;
 }
 
-export function filterEvents<T extends SlocialEvent>(events: T[], f: Filters, origin?: LatLng): T[] {
-  return events.filter((e) => matchesFilters(e, f, origin))
+export function matchesFilters(
+  event: SlocialEvent,
+  f: Filters,
+  { origin, userAge }: FilterContext = {},
+): boolean {
+  if (!matchesQuery(event, f.query)) return false;
+  if (f.categories.length > 0 && !f.categories.includes(event.category)) return false;
+  if (f.radiusMiles !== "any" && origin && distanceMiles(origin, [event.lat, event.lng]) > f.radiusMiles) return false;
+  if (f.freeOnly && !isFree(event.price)) return false;
+  // Age limits: an event with a minimum age is not shown to someone younger.
+  const minAge = minimumAge(event.restrictions);
+  if (minAge !== null && userAge !== undefined && userAge < minAge) return false;
+  return true;
+}
+
+export function filterEvents<T extends SlocialEvent>(
+  events: T[],
+  f: Filters,
+  context: FilterContext = {},
+): T[] {
+  return events.filter((e) => matchesFilters(e, f, context));
 }

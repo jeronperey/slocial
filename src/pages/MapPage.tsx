@@ -5,6 +5,8 @@ import {DEFAULT_FILTERS, filterEvents, type Filters } from '../components/events
 import { FilterBar } from '../components/events/FilterBar'
 import { AppHeader } from '../components/layout/AppHeader'
 import { FilterPanel } from '../components/events/FilterPanel'
+import { SearchBar } from '../components/events/SearchBar'
+import { DEFAULT_USER } from '../data/user'
 import type { SlocialEvent } from "../data/types";
 import { EventPopup } from '../components/events/EventPopup'
 
@@ -13,10 +15,11 @@ import { EventPopup } from '../components/events/EventPopup'
 export function MapPage() {
   const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS)
   const [panelOpen, setPanelOpen] = useState(false)
+  const [searchOpen, setSearchOpen] = useState(false)
   const [openPopup, setOpenPopup] = useState(false)
   const [popup, setPopup] = useState<SlocialEvent | undefined>()
   const [selectedId, setSelectedId] = useState<string | undefined>()
-  const visibleEvents = filterEvents(EVENTS, filters, YOU_POSITION)
+  const visibleEvents = filterEvents(EVENTS, filters, { origin: YOU_POSITION, userAge: DEFAULT_USER.age })
   
   function handleSelectEvent(id: string) {
     const selectedEvent = EVENTS.find((event) => event.id === id)
@@ -46,7 +49,17 @@ export function MapPage() {
         restrictions={popup.restrictions}
       />
       )}
-      <AppHeader title="Events Around You"/>
+      <AppHeader title="Events Around You" onSearch={() => setSearchOpen((open) => !open)} />
+      {searchOpen && (
+        <SearchBar
+          value={filters.query}
+          onChange={(query) => setFilters({ ...filters, query })}
+          onClose={() => {
+            setSearchOpen(false)
+            setFilters({ ...filters, query: "" })
+          }}
+        />
+      )}
       <FilterBar
         filters={filters}
         onChange={setFilters}
@@ -63,7 +76,7 @@ export function MapPage() {
 
         {visibleEvents.length === 0 && (
           <div className="pointer-events-none absolute inset-x-4 bottom-4 z-[500] rounded-xl bg-surface px-4 py-3 text-center text-xs text-muted shadow-[0_6px_20px_rgba(0,0,0,0.4)]">
-            No events match your filters.
+            No events match your search or filters.
           </div>
         )}
 
@@ -71,7 +84,8 @@ export function MapPage() {
           <FilterPanel
             filters={filters}
             onApply={(next) => {
-              setFilters(next)
+              // Keep the live search text: the panel only edits category and radius.
+              setFilters({ ...next, query: filters.query })
               setPanelOpen(false)
             }}
           />

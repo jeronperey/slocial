@@ -7,9 +7,10 @@ import { useNavigate } from "react-router";
 interface AppHeaderProps {
   title: string;
   back?: boolean;
+  onSearch?: () => void;
 }
 
-export function AppHeader({ title, back = false }: AppHeaderProps) {
+export function AppHeader({ title, back = false, onSearch }: AppHeaderProps) {
   const navigate = useNavigate();
 
   const goBack = () => {
@@ -37,7 +38,7 @@ export function AppHeader({ title, back = false }: AppHeaderProps) {
 
       {!back && (
         <div className="flex gap-1 text-muted">
-          <IconButton label="Search">
+          <IconButton label="Search" onClick={onSearch}>
             <SearchIcon size={19} />
           </IconButton>
           <IconButton label="Menu">
@@ -52,14 +53,17 @@ export function AppHeader({ title, back = false }: AppHeaderProps) {
 function IconButton({
   label,
   children,
+  onClick,
 }: {
   label: string;
   children: ReactNode;
+  onClick?: () => void;
 }) {
   return (
     <button
       type="button"
       aria-label={label}
+      onClick={onClick}
       className="flex size-8 cursor-pointer items-center justify-center rounded-lg hover:text-ink focus-visible:outline-2 focus-visible:outline-primary"
     >
       {children}
