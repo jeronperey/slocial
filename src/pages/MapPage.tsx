@@ -83,6 +83,7 @@ export function MapPage() {
         {panelOpen && (
           <FilterPanel
             filters={filters}
+            onClose={() => setPanelOpen(false)}
             onApply={(next) => {
               // Keep the live search text: the panel only edits category and radius.
               setFilters({ ...next, query: filters.query })

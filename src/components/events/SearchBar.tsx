@@ -18,6 +18,7 @@ export function SearchBar({ value, onChange, onClose }: SearchBarProps) {
           type="search"
           value={value}
           onChange={(e) => onChange(e.target.value)}
+          onKeyDown={(e) => e.key === "Escape" && onClose()}
           placeholder="Search events"
           aria-label="Search events"
           className="min-w-0 flex-1 bg-transparent text-[13.5px] text-ink outline-none placeholder:text-muted [&::-webkit-search-cancel-button]:hidden"

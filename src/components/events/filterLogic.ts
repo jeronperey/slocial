@@ -2,12 +2,13 @@ import type { Category, SlocialEvent } from "../../data/types";
 
 // Filter state + logic: decides which events show on the map.
 
+// Casual comes first: it is the main category for a newcomer looking for low-commitment events.
 export const CATEGORIES: { value: Category; label: string }[] = [
+  { value: "casual", label: "Casual" },
   { value: "music", label: "Music" },
   { value: "sports", label: "Sports" },
   { value: "party", label: "Party" },
   { value: "movie", label: "Movie" },
-  { value: "casual", label: "Casual" },
 ];
 
 export type Radius = "any" | number;

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../ui/Button";
 import { Checkbox } from "../ui/Checkbox";
 import { Radio } from "../ui/Radio";
@@ -18,10 +18,21 @@ import {
 interface FilterPanelProps {
   filters: Filters;
   onApply: (filters: Filters) => void;
+  onClose?: () => void;
 }
 
-export function FilterPanel({ filters, onApply }: FilterPanelProps) {
+export function FilterPanel({ filters, onApply, onClose }: FilterPanelProps) {
   const [draft, setDraft] = useState<Filters>(filters);
+
+  // Escape closes the panel without applying.
+  useEffect(() => {
+    if (!onClose) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [onClose]);
 
   return (
     <div
@@ -54,7 +65,13 @@ export function FilterPanel({ filters, onApply }: FilterPanelProps) {
         ))}
       </div>
 
-      {/* "Other" (free only, happening today) returns once events have a price and a date. */}
+      <SectionLabel>Other</SectionLabel>
+      <Checkbox
+        label="Free events only"
+        checked={draft.freeOnly}
+        onChange={(freeOnly) => setDraft({ ...draft, freeOnly })}
+      />
+      {/* "Happening today" returns once events have real dates. */}
 
       <div className="mt-3 flex gap-2">
         <Button variant="secondary" onClick={() => setDraft(DEFAULT_FILTERS)}>

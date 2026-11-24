@@ -25,17 +25,17 @@ export function FilterBar({
   const active = countActiveFilters(filters);
 
   return (
-    <div className="flex shrink-0 items-center gap-2 bg-surface px-4 pb-3">
+    <div className="flex shrink-0 items-center gap-2 bg-surface px-4 pb-3.5">
       <button
         type="button"
         aria-expanded={panelOpen}
         onClick={onOpenPanel}
-        className="flex h-7 shrink-0 cursor-pointer items-center gap-1.5 rounded-full bg-raised px-3 text-xs font-bold text-ink transition hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+        className="flex h-9 shrink-0 cursor-pointer items-center gap-2 rounded-full bg-raised px-4 text-[13px] font-bold text-ink transition hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
       >
-        <SlidersHorizontalIcon size={13} />
+        <SlidersHorizontalIcon size={15} />
         Filters
         {active > 0 && (
-          <span className="flex size-4 items-center justify-center rounded-full bg-primary text-[10px] text-on-primary">
+          <span className="flex size-5 items-center justify-center rounded-full bg-primary text-[11px] text-on-primary">
             {active}
           </span>
         )}
@@ -46,6 +46,7 @@ export function FilterBar({
           <Chip
             key={value}
             label={label}
+            size="lg"
             active={filters.categories.includes(value)}
             onClick={() => onChange(toggleCategory(filters, value))}
           />
