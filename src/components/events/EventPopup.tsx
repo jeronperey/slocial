@@ -61,9 +61,7 @@ export function EventPopup({
     navigate(`/events/${encodeURIComponent(event.id)}/report`, {
       state: {
         backgroundLocation: currentLocation,
-        event: {
-          event
-        },
+        event: event,
       },
     });
   }
