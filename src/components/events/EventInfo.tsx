@@ -1,11 +1,12 @@
 interface EventInfoProps {
   price?: number;
   restrictions?: string;
+  attendance: number;
 }
 
 // Price / Restrictions tiles.
 // TODO: build this component.
-export function EventInfo({ price, restrictions }: EventInfoProps) {
+export function EventInfo({ price, restrictions, attendance }: EventInfoProps) {
   return (
     <div className="flex flex-col gap-2 pb-8">
       <h2 className="border-b border-gray-300 pb-2 ">Information</h2>
@@ -17,6 +18,11 @@ export function EventInfo({ price, restrictions }: EventInfoProps) {
         <h3 className="">Restrictions : </h3>
         {restrictions ? <p>{restrictions}</p> : <p>None</p>}
       </div>
+      {attendance > 0 && (
+        <div className="flex flex-row gap-2 items-center">
+          <h3 className="">Attendance : {attendance}</h3>
+        </div>
+      )}
     </div>
   );
 }

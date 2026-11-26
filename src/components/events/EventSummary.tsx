@@ -6,7 +6,6 @@ import type { Category } from "../../data/types";
 import { Tag } from "../ui/Tag";
 import { Button } from "../ui/Button";
 
-
 // Event icon + title + date/time + address.
 // TODO: build this component.
 interface EventSummaryProps {
@@ -53,9 +52,8 @@ export function EventSummary({
           </div>
 
           <div className="text-lg">
-            <Tag key = {categories} category = {categories}/>
+            <Tag key={categories} category={categories} />
           </div>
-          
         </div>
       </div>
     </div>

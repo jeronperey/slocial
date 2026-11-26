@@ -98,7 +98,9 @@ export function ReportEventPage() {
           </button>
           <h1 className="text-[17px] font-bold">Report event</h1>
         </header>
-        <p className="p-4 text-sm text-muted">Event details are not available.</p>
+        <p className="p-4 text-sm text-muted">
+          Event details are not available.
+        </p>
       </div>
     );
   }
@@ -145,7 +147,8 @@ export function ReportEventPage() {
               <p className="mt-2 text-sm">{event.description}</p>
             )}
             <p className="mt-2 text-sm text-muted">
-              {event.date}{event.time ? ` · ${event.time}` : ""}
+              {event.date}
+              {event.time ? ` · ${event.time}` : ""}
             </p>
             <div className="mt-2">
               <Tag category={event.categories} />
@@ -169,7 +172,9 @@ export function ReportEventPage() {
               Anything else to add?
               <textarea
                 value={additionalInfo}
-                onChange={(changeEvent) => setAdditionalInfo(changeEvent.target.value)}
+                onChange={(changeEvent) =>
+                  setAdditionalInfo(changeEvent.target.value)
+                }
                 rows={3}
                 className="w-full resize-none rounded-lg border border-muted/40 bg-surface p-3 text-sm font-normal text-ink outline-none focus:border-primary"
               />

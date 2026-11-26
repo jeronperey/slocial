@@ -10,36 +10,19 @@ import { faFlag } from "@fortawesome/free-solid-svg-icons/faFlag";
 import { faBookmark } from "@fortawesome/free-solid-svg-icons/faBookmark";
 import { googleMapsLink } from "../map/mapLinks";
 import { useLocation, useNavigate } from "react-router";
+import type { SlocialEvent } from "../../data/types";
 
-// TODO: build this component.
 interface EventPopupProps {
-  categories: Category;
-  name: string;
-  date: string;
-  time?: string;
-  location: string;
-  description?: string;
-  price?: number;
-  restrictions?: string;
+  event: SlocialEvent;
   isOpen: boolean;
-  lat: number;
-  lng: number;
+ 
   onClose: () => void;
 }
 
 export function EventPopup({
   isOpen,
   onClose,
-  categories,
-  name,
-  date,
-  time,
-  location,
-  description,
-  price,
-  restrictions,
-  lat,
-  lng,
+  event
 }: EventPopupProps) {
   const navigate = useNavigate();
   const currentLocation = useLocation();
@@ -52,60 +35,34 @@ export function EventPopup({
     saveEvent,
     unsaveEvent,
   } = useAppStore();
-  const going = registeredEvents.some((event) => event.name === name);
-  const saved = savedEvents.some((event) => event.name === name);
-  const reported = reportedEvents.some((event) => event.name === name);
+
+  const going = registeredEvents.some((events) => events.id === event.id);
+  const saved = savedEvents.some((events) => events.id === event.id);
+  const reported = reportedEvents.some((events) => events.id === event.id);
 
   function handleRegister() {
     if (!going) {
-      registerForEvent({
-        name,
-        categories,
-        date,
-        time,
-        location,
-        description,
-        price,
-        restrictions
-      });
+      registerForEvent(event);
     } else {
-      unregisterFromEvent(name);
+      unregisterFromEvent(event.id);
     }
   }
 
   function handleSave() {
     if (!saved) {
-      saveEvent({
-        name,
-        categories,
-        date,
-        time,
-        location,
-        description,
-        price,
-        restrictions
-      });
+      saveEvent(event);
     } else {
-      unsaveEvent(name);
+      unsaveEvent(event.id);
     }
   }
 
   function handleReport() {
     // open the report form over this popup and pass the event plus return location.
-    navigate(`/events/${encodeURIComponent(name)}/report`, {
+    navigate(`/events/${encodeURIComponent(event.id)}/report`, {
       state: {
         backgroundLocation: currentLocation,
         event: {
-        name,
-        categories,
-        date,
-        time,
-        location,
-        description,
-        price,
-        restrictions,
-        lat,
-        lng,
+          event
         },
       },
     });
@@ -113,6 +70,8 @@ export function EventPopup({
   if (!isOpen) return null;
 
   function handleDirections() {
+    const lat = event.lat;
+    const lng = event.lng;
     window.open(googleMapsLink({ lat, lng }), "_blank");
   }
 
@@ -121,11 +80,11 @@ export function EventPopup({
       <div className="flex flex-col gap-4 rounded-xl bg-line p-8 relative w-[25rem] max-w-full">
         <div>
           <EventSummary
-            name={name}
-            date={date}
-            time={time}
-            location={location}
-            categories={categories}
+            name={event.id}
+            date={event.date}
+            time={event.time}
+            location={event.address}
+            categories={event.category}
             onDirections={handleDirections}
           />
           <FontAwesomeIcon
@@ -135,8 +94,12 @@ export function EventPopup({
           />
         </div>
 
-        <EventCard description={description} />
-        <EventInfo price={price} restrictions={restrictions} />
+        <EventCard description={event.description} />
+        <EventInfo
+          price={event.price}
+          restrictions={event.restrictions}
+          attendance={event.attendance}
+        />
 
         <div className="flex flex-row gap-2 w-full justify-center">
           <Button

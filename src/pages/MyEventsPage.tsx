@@ -7,7 +7,9 @@ import { useAppStore } from "../store/AppStore";
 export function MyEventsPage() {
   const [section, setSection] = useState<"going" | "saved">("going");
   const { registeredEvents, savedEvents } = useAppStore();
-  const [selectedEvent, setSelectedEvent] = useState<(typeof registeredEvents)[number] | null>(null);
+  const [selectedEvent, setSelectedEvent] = useState<
+    (typeof registeredEvents)[number] | null
+  >(null);
   const events = section === "going" ? registeredEvents : savedEvents;
   const mapEvent = selectedEvent
     ? EVENTS.find((event) => event.title === selectedEvent.name)
@@ -53,7 +55,9 @@ export function MyEventsPage() {
       <div className="min-h-0 flex-1 overflow-y-auto p-4">
         {events.length === 0 ? (
           <p className="py-8 text-center text-sm text-muted">
-            {section === "going" ? "You are not going to any events yet." : "You have not saved any events yet."}
+            {section === "going"
+              ? "You are not going to any events yet."
+              : "You have not saved any events yet."}
           </p>
         ) : (
           <div className="flex flex-col gap-3">

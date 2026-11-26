@@ -101,12 +101,19 @@ export function matchesFilters(
   { origin, userAge }: FilterContext = {},
 ): boolean {
   if (!matchesQuery(event, f.query)) return false;
-  if (f.categories.length > 0 && !f.categories.includes(event.category)) return false;
-  if (f.radiusMiles !== "any" && origin && distanceMiles(origin, [event.lat, event.lng]) > f.radiusMiles) return false;
+  if (f.categories.length > 0 && !f.categories.includes(event.category))
+    return false;
+  if (
+    f.radiusMiles !== "any" &&
+    origin &&
+    distanceMiles(origin, [event.lat, event.lng]) > f.radiusMiles
+  )
+    return false;
   if (f.freeOnly && !isFree(event.price)) return false;
   // Age limits: an event with a minimum age is not shown to someone younger.
   const minAge = minimumAge(event.restrictions);
-  if (minAge !== null && userAge !== undefined && userAge < minAge) return false;
+  if (minAge !== null && userAge !== undefined && userAge < minAge)
+    return false;
   return true;
 }
 

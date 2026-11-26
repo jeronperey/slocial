@@ -1,7 +1,8 @@
 "use client";
 
 import { createContext, useContext, useState, type ReactNode } from "react";
-import type { Category } from "../data/types";
+import type { Category, SlocialEvent } from "../data/types";
+import { EVENTS } from "../data/events";
 
 /**
  * AppStore — in-memory app state (the prototype's "backend").
@@ -12,33 +13,30 @@ import type { Category } from "../data/types";
  * We will not use this now but we might ant this for later
  */
 
-type Event = {
-  categories: Category;
-  name: string;
-  date: string;
-  time?: string;
-  location: string;
-  description?: string;
-  price?: number;
-  restrictions?: string;
-};
 
-export type ReportReason = "Illegal Substances" | "Fraud" | "Bullying/Harrassment";
+
+export type ReportReason =
+  "Illegal Substances" | "Fraud" | "Bullying/Harrassment";
 
 export interface EventReport {
-  event: Event;
+  event: SlocialEvent;
   reasons: ReportReason[];
   additionalInfo: string;
 }
 
 interface AppStore {
-  registeredEvents: Event[];
-  savedEvents: Event[];
-  reportedEvents: Event[];
+  events: SlocialEvent[];
+  registeredEvents: SlocialEvent[];
+  savedEvents: SlocialEvent[];
+  reportedEvents: SlocialEvent[];
   reports: EventReport[];
-  registerForEvent: (event: Event) => void;
-  saveEvent: (event: Event) => void;
-  submitReport: (event: Event, reasons: ReportReason[], additionalInfo: string) => void;
+  registerForEvent: (event: SlocialEvent) => void;
+  saveEvent: (event: SlocialEvent) => void;
+  submitReport: (
+    event: SlocialEvent,
+    reasons: ReportReason[],
+    additionalInfo: string,
+  ) => void;
   unregisterFromEvent: (eventName: string) => void;
   unsaveEvent: (eventName: string) => void;
 }
@@ -46,56 +44,90 @@ interface AppStore {
 const AppStoreContext = createContext<AppStore | undefined>(undefined);
 
 export function AppStoreProvider({ children }: { children: ReactNode }) {
-  const [registeredEvents, setRegisteredEvents] = useState<Event[]>([]);
-  const [savedEvents, setSavedEvents] = useState<Event[]>([]);
-  const [reportedEvents, setReportedEvents] = useState<Event[]>([]);
+  //allows events status' to be changed, i.e attendance
+  const [events, setEvents] = useState<SlocialEvent[]>(EVENTS);
+  const [registeredEvents, setRegisteredEvents] = useState<SlocialEvent[]>([]);
+  const [savedEvents, setSavedEvents] = useState<SlocialEvent[]>([]);
+  const [reportedEvents, setReportedEvents] = useState<SlocialEvent[]>([]);
   const [reports, setReports] = useState<EventReport[]>([]);
 
-  function registerForEvent(event: Event) {
+  function registerForEvent(event: SlocialEvent) {
     setRegisteredEvents((currentEvents) => {
+      //returns the registered event to client
       const alreadyRegistered = currentEvents.some(
-        (currentEvent) => currentEvent.name === event.name,
+        (currentEvent) => currentEvent.id === event.id,
       );
 
-      return alreadyRegistered ? currentEvents : [...currentEvents, event];
+      if (alreadyRegistered) return currentEvents;
+
+      return [...currentEvents, { ...event, attendance: event.attendance + 1 }];
     });
+    //increments events attendance within the AppStore
+    setEvents((currentEvents) =>
+      currentEvents.map((currentEvent) =>
+        currentEvent.id === event.id
+          ? {
+              ...currentEvent,
+              attendance: currentEvent.attendance + 1,
+            }
+          : currentEvent,
+      ),
+    );
   }
 
-  function saveEvent(event: Event) {
+  function saveEvent(event: SlocialEvent) {
     setSavedEvents((currentEvents) => {
       const alreadySaved = currentEvents.some(
-        (currentEvent) => currentEvent.name === event.name,
+        (currentEvent) => currentEvent.id === event.id,
       );
 
       return alreadySaved ? currentEvents : [...currentEvents, event];
     });
   }
 
-  function submitReport(event: Event, reasons: ReportReason[], additionalInfo: string) {
+  function submitReport(
+    event: SlocialEvent,
+    reasons: ReportReason[],
+    additionalInfo: string,
+  ) {
     // store one report per event .. tho in reality multiple users should be able to report, this is easier for now since we aren't dealing with multiple concurrent users
     setReportedEvents((currentEvents) => {
-      const alreadyReported = currentEvents.some((currentEvent) => currentEvent.name === event.name);
+      const alreadyReported = currentEvents.some(
+        (currentEvent) => currentEvent.id === event.id,
+      );
       return alreadyReported ? currentEvents : [...currentEvents, event];
     });
     setReports((currentReports) => [
       { event, reasons, additionalInfo },
-      ...currentReports.filter((report) => report.event.name !== event.name),
+      ...currentReports.filter((report) => report.event.id !== event.id),
     ]);
   }
 
   function unregisterFromEvent(eventName: string) {
     setRegisteredEvents((currentEvents) =>
-      currentEvents.filter((event) => event.name !== eventName),
+      currentEvents.filter((event) => event.id !== eventName),
+    );
+
+    setEvents((currentEvents) =>
+      currentEvents.map((event) =>
+        event.id === eventName
+          ? {
+              ...event,
+              attendance: Math.max(0, event.attendance - 1),
+            }
+          : event,
+      ),
     );
   }
   function unsaveEvent(eventName: string) {
     setSavedEvents((currentEvents) =>
-      currentEvents.filter((event) => event.name !== eventName),
+      currentEvents.filter((event) => event.id !== eventName),
     );
   }
   return (
     <AppStoreContext.Provider
       value={{
+        events,
         registeredEvents,
         savedEvents,
         reportedEvents,
