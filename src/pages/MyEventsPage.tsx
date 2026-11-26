@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { EventPopup } from "../components/events/EventPopup";
 import { AppHeader } from "../components/layout/AppHeader";
-import { EVENTS } from "../data/events";
 import { useAppStore } from "../store/AppStore";
 
 export function MyEventsPage() {
@@ -11,9 +10,6 @@ export function MyEventsPage() {
     (typeof registeredEvents)[number] | null
   >(null);
   const events = section === "going" ? registeredEvents : savedEvents;
-  const mapEvent = selectedEvent
-    ? EVENTS.find((event) => event.title === selectedEvent.name)
-    : undefined;
 
   return (
     <div className="flex h-full min-h-0 flex-col">
@@ -21,16 +17,7 @@ export function MyEventsPage() {
         <EventPopup
           isOpen={true}
           onClose={() => setSelectedEvent(null)}
-          categories={selectedEvent.categories}
-          name={selectedEvent.name}
-          date={selectedEvent.date}
-          time={selectedEvent.time}
-          location={selectedEvent.location}
-          description={selectedEvent.description}
-          price={selectedEvent.price}
-          restrictions={selectedEvent.restrictions}
-          lat={mapEvent ? mapEvent.lat : 0}
-          lng={mapEvent ? mapEvent.lng : 0}
+          event = {selectedEvent}
         />
       )}
       <AppHeader title="My Events" />
@@ -63,14 +50,14 @@ export function MyEventsPage() {
           <div className="flex flex-col gap-3">
             {events.map((event) => (
               <button
-                key={event.name}
+                key={event.id}
                 type="button"
                 onClick={() => setSelectedEvent(event)}
                 className="rounded-xl bg-surface p-4 text-left hover:bg-raised focus-visible:outline-2 focus-visible:outline-primary"
               >
-                <h2 className="font-bold">{event.name}</h2>
+                <h2 className="font-bold">{event.id}</h2>
                 <p className="mt-1 text-sm text-muted">{event.date}</p>
-                <p className="text-sm text-muted">{event.location}</p>
+                <p className="text-sm text-muted">{event.address}</p>
               </button>
             ))}
           </div>
