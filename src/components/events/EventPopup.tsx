@@ -1,7 +1,6 @@
 import { EventCard } from "./EventCard";
 import { EventSummary } from "./EventSummary";
 import { EventInfo } from "./EventInfo";
-import type { Category } from "../../data/types";
 import { Button } from "../ui/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons/faXmark";
@@ -11,6 +10,9 @@ import { faBookmark } from "@fortawesome/free-solid-svg-icons/faBookmark";
 import { googleMapsLink } from "../map/mapLinks";
 import { useLocation, useNavigate } from "react-router";
 import type { SlocialEvent } from "../../data/types";
+
+
+
 
 interface EventPopupProps {
   event: SlocialEvent;

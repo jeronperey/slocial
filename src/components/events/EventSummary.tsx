@@ -1,11 +1,24 @@
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons/faLocationDot";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPeopleGroup } from "@fortawesome/free-solid-svg-icons/faPeopleGroup";
+import { faUserGroup } from "@fortawesome/free-solid-svg-icons/faUserGroup";
+import { faPersonRunning } from "@fortawesome/free-solid-svg-icons/faPersonRunning";
+import { faMusic } from "@fortawesome/free-solid-svg-icons/faMusic";
+import { faVideo } from "@fortawesome/free-solid-svg-icons/faVideo";
+import { faChampagneGlasses } from "@fortawesome/free-solid-svg-icons/faChampagneGlasses";
+import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import type { Category } from "../../data/types";
 import { Tag } from "../ui/Tag";
 import { Button } from "../ui/Button";
 
+
+const ICONS: Record<Category, IconDefinition> = {
+  casual: faUserGroup,
+  sports: faPersonRunning,
+  music: faMusic,
+  movie: faVideo,
+  party: faChampagneGlasses,
+};
 // Event icon + title + date/time + address.
 // TODO: build this component.
 interface EventSummaryProps {
@@ -32,7 +45,7 @@ export function EventSummary({
           <h2 className="font-title underline">
             <FontAwesomeIcon
               className="mr-2 h-10 w-10 text-2xl"
-              icon={faPeopleGroup}
+              icon={ICONS[categories]}
             />
             {name}
           </h2>
