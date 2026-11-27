@@ -1,62 +1,60 @@
-import {useState} from 'react'
-import {EVENTS} from '../data/events'
-import { MapView, YOU_POSITION } from '../components/map/MapView'
-import {DEFAULT_FILTERS, filterEvents, type Filters } from '../components/events/filterLogic'
-import { FilterBar } from '../components/events/FilterBar'
-import { AppHeader } from '../components/layout/AppHeader'
-import { FilterPanel } from '../components/events/FilterPanel'
-import { SearchBar } from '../components/events/SearchBar'
-import { DEFAULT_USER } from '../data/user'
-import type { SlocialEvent } from "../data/types";
-import { EventPopup } from '../components/events/EventPopup'
+import { useState } from "react";
+import { useAppStore } from "../store/AppStore";
+//import { EVENTS } from "../data/events";
+import { MapView, YOU_POSITION } from "../components/map/MapView";
+import {
+  DEFAULT_FILTERS,
+  filterEvents,
+  type Filters,
+} from "../components/events/filterLogic";
+import { FilterBar } from "../components/events/FilterBar";
+import { AppHeader } from "../components/layout/AppHeader";
+import { FilterPanel } from "../components/events/FilterPanel";
+import { SearchBar } from "../components/events/SearchBar";
+import { DEFAULT_USER } from "../data/user";
+import { EventPopup } from "../components/events/EventPopup";
 
 // Home screen: map of nearby events with filters and an event popup (register, save, report).
 // TODO: build this page.
 export function MapPage() {
-  const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS)
-  const [panelOpen, setPanelOpen] = useState(false)
-  const [searchOpen, setSearchOpen] = useState(false)
-  const [openPopup, setOpenPopup] = useState(false)
-  const [popup, setPopup] = useState<SlocialEvent | undefined>()
-  const [selectedId, setSelectedId] = useState<string | undefined>()
-  const visibleEvents = filterEvents(EVENTS, filters, { origin: YOU_POSITION, userAge: DEFAULT_USER.age })
-  
-  function handleSelectEvent(id: string) {
-    const selectedEvent = EVENTS.find((event) => event.id === id)
-    setOpenPopup(true)
-    setPopup(selectedEvent)
-    setSelectedId(id)
-  }
+  const { events } = useAppStore();
+  const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS);
+  const [panelOpen, setPanelOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [openPopup, setOpenPopup] = useState(false);
+  const [selectedId, setSelectedId] = useState<string | undefined>();
+  const visibleEvents = filterEvents(events, filters, {
+    origin: YOU_POSITION,
+    userAge: DEFAULT_USER.age,
+  });
 
+  function handleSelectEvent(id: string) {
+    setOpenPopup(true);
+    setSelectedId(id);
+  }
+  const selectedEvent = events.find((event) => event.id === selectedId);
   return (
-    
     <div className="relative flex h-full w-full flex-col">
-      {popup && (
+      {selectedEvent && (
         <EventPopup
-        isOpen={openPopup}
-        onClose={() => {
-          setOpenPopup(false);
-        }}
-        categories={popup.category}
-        name={popup.title}
-        date={popup.date}
-        time={popup.time}
-        location={popup.address}
-        lat={popup.lat}
-        lng={popup.lng}
-        description={popup.description}
-        price = {popup.price}
-        restrictions={popup.restrictions}
-      />
+          isOpen={openPopup}
+          onClose={() => {
+            setOpenPopup(false);
+          }}
+          event = {selectedEvent}
+        />
       )}
-      <AppHeader title="Events Around You" onSearch={() => setSearchOpen((open) => !open)} />
+      <AppHeader
+        title="Events Around You"
+        onSearch={() => setSearchOpen((open) => !open)}
+      />
       {searchOpen && (
         <SearchBar
           value={filters.query}
           onChange={(query) => setFilters({ ...filters, query })}
           onClose={() => {
-            setSearchOpen(false)
-            setFilters({ ...filters, query: "" })
+            setSearchOpen(false);
+            setFilters({ ...filters, query: "" });
           }}
         />
       )}
@@ -86,13 +84,12 @@ export function MapPage() {
             onClose={() => setPanelOpen(false)}
             onApply={(next) => {
               // Keep the live search text: the panel only edits category and radius.
-              setFilters({ ...next, query: filters.query })
-              setPanelOpen(false)
+              setFilters({ ...next, query: filters.query });
+              setPanelOpen(false);
             }}
           />
         )}
-        
       </div>
     </div>
-  )
+  );
 }

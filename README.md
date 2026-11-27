@@ -55,9 +55,10 @@ src/
 | MyEventsPage     | `/events`                | Events – Going & Saved                                                                                                         |
 | EventDetailsPage | `/events/:id`            | Event details – Corgi Meetup                                                                                                   |
 | DirectionsPage   | `/events/:id/directions` | Map – Directions                                                                                                               |
-| ReportEventPage  | `/events/:id/report`     | Report event, Report event – Bullying checked, Report event – Submitted   
+| ReportEventPage  | `/events/:id/report`     | Report event, Report event – Bullying checked, Report event – Submitted                                                        |
 
 ## Team Contributions
+
 **Amelia:** Implemented event cards + storing app state, provided Tailwind CSS support
 
 **Kyler:** Designed UI toolkit/building blocks, implemented profile page
@@ -66,5 +67,4 @@ src/
 
 **Vishnu:** Implemented the dynamic + scrollable map, including map icons, "you are here" dot, and Google Maps linkage
 
-**Ava:** Populated the saved/registered events page, implemented report card and its related functionality 
-
+**Ava:** Populated the saved/registered events page, implemented report card and its related functionality

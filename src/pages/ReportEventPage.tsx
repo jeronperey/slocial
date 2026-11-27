@@ -7,8 +7,9 @@ import { EventPopup } from "../components/events/EventPopup";
 import { Checkbox } from "../components/ui/Checkbox";
 import { Tag } from "../components/ui/Tag";
 import type { Category } from "../data/types";
+import type { SlocialEvent } from "../data/types";
 import { useAppStore, type ReportReason } from "../store/AppStore";
-
+/*
 interface ReportEventDetails {
   name: string;
   categories: Category;
@@ -20,11 +21,11 @@ interface ReportEventDetails {
   restrictions?: string;
   lat: number;
   lng: number;
-}
+}*/
 
 interface ReportRouteState {
   backgroundLocation?: Location;
-  event?: ReportEventDetails;
+  event?: SlocialEvent;
 }
 
 const REPORT_REASONS: ReportReason[] = [
@@ -41,7 +42,7 @@ export function ReportEventPage() {
   const event = routeState?.event;
   const { submitReport, reports } = useAppStore();
   const existingReport = event
-    ? reports.find((report) => report.event.name === event.name)
+    ? reports.find((report) => report.event.id === event.id)
     : undefined;
   const [selectedReasons, setSelectedReasons] = useState<ReportReason[]>(
     existingReport?.reasons ?? [],
@@ -98,7 +99,9 @@ export function ReportEventPage() {
           </button>
           <h1 className="text-[17px] font-bold">Report event</h1>
         </header>
-        <p className="p-4 text-sm text-muted">Event details are not available.</p>
+        <p className="p-4 text-sm text-muted">
+          Event details are not available.
+        </p>
       </div>
     );
   }
@@ -109,16 +112,7 @@ export function ReportEventPage() {
         <EventPopup
           isOpen={true}
           onClose={handleBack}
-          categories={event.categories}
-          name={event.name}
-          date={event.date}
-          time={event.time}
-          location={event.location}
-          description={event.description}
-          price={event.price}
-          restrictions={event.restrictions}
-          lat={event.lat}
-          lng={event.lng}
+          event = {event}
         />
       )}
       {/* event popup is still there behind the report form so they can click back/out of it */}
@@ -139,16 +133,17 @@ export function ReportEventPage() {
           <div className="mb-5 border-b border-gray-300 pb-4">
             <h2 className="flex items-center gap-2 text-base font-bold">
               <FontAwesomeIcon icon={faPeopleGroup} />
-              {event.name}
+              {event.id}
             </h2>
             {event.description && (
               <p className="mt-2 text-sm">{event.description}</p>
             )}
             <p className="mt-2 text-sm text-muted">
-              {event.date}{event.time ? ` · ${event.time}` : ""}
+              {event.date}
+              {event.time ? ` · ${event.time}` : ""}
             </p>
             <div className="mt-2">
-              <Tag category={event.categories} />
+              <Tag category={event.category} />
             </div>
           </div>
 
@@ -169,7 +164,9 @@ export function ReportEventPage() {
               Anything else to add?
               <textarea
                 value={additionalInfo}
-                onChange={(changeEvent) => setAdditionalInfo(changeEvent.target.value)}
+                onChange={(changeEvent) =>
+                  setAdditionalInfo(changeEvent.target.value)
+                }
                 rows={3}
                 className="w-full resize-none rounded-lg border border-muted/40 bg-surface p-3 text-sm font-normal text-ink outline-none focus:border-primary"
               />
