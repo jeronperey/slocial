@@ -1,6 +1,7 @@
-import { ChevronLeftIcon, MenuIcon, SearchIcon } from "lucide-react";
+import { ChevronLeftIcon, SearchIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { useNavigate } from "react-router";
+import { HeaderMenu } from "./HeaderMenu";
 
 // Top bar: page title, optional back arrow, search + menu icons.
 
@@ -41,9 +42,7 @@ export function AppHeader({ title, back = false, onSearch }: AppHeaderProps) {
           <IconButton label="Search" onClick={onSearch}>
             <SearchIcon size={19} />
           </IconButton>
-          <IconButton label="Menu">
-            <MenuIcon size={19} />
-          </IconButton>
+          <HeaderMenu />
         </div>
       )}
     </header>
