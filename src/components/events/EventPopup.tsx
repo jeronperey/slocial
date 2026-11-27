@@ -99,6 +99,7 @@ export function EventPopup({
           price={event.price}
           restrictions={event.restrictions}
           attendance={event.attendance}
+          ticketUrl={event.ticketUrl}
         />
 
         <div className="flex flex-row gap-2 w-full justify-center">
