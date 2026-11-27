@@ -4,6 +4,6 @@ import type { User } from "./types";
 export const DEFAULT_USER: User = {
   name: "Sheldon Cooper",
   email: "scoop@gmail.com",
-  phone: "(123) 456-7889",
+  phone: "1234567889",
   age: 19,
 };
