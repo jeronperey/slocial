@@ -209,7 +209,7 @@ export function ProfilePage() {
 
             <div className="mt-4 grid grid-cols-2 gap-2">
               <Stat value={registeredEvents.length} label="Going" />
-              <Stat value={savedEvents.length} label="Saved" />
+              <Stat value={savedEvents.length} label="Interested" />
             </div>
           </>
         )}

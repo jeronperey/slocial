@@ -114,7 +114,7 @@ export function EventPopup({
             onClick={() => handleSave()}
             variant={saved ? "successBorder" : "clear"}
           >
-            {saved ? "Saved" : "Save"}
+            {saved ? "Interested" : "Interested?"}
             <FontAwesomeIcon icon={faBookmark} />
           </Button>
           <Button
