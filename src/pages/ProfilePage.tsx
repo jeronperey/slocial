@@ -15,10 +15,13 @@ export function ProfilePage() {
   const [user, setUser] = useState<User>(DEFAULT_USER);
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState<User>(DEFAULT_USER);
-  const [showReports, setShowReports] = useState(false);
   const { reports, registeredEvents, savedEvents } = useAppStore();
   const navigate = useNavigate();
   const currentLocation = useLocation();
+  // The header menu's "My reports" opens this page with the list already showing.
+  const [showReports, setShowReports] = useState(
+    Boolean(currentLocation.state?.openReports),
+  );
 
   const initials = user.name
     .split(" ")
