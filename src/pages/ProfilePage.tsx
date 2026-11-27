@@ -5,18 +5,21 @@ import { AppHeader } from "../components/layout/AppHeader";
 import { Button } from "../components/ui/Button";
 import { TextInput } from "../components/ui/TextInput";
 import type { User } from "../data/types";
-import { DEFAULT_USER } from "../data/user";
 import { useAppStore } from "../store/AppStore";
 
 // Shows the user's info with an option to edit it.
-// TODO: move the user into AppStore so edits survive switching tabs.
 
 export function ProfilePage() {
-  const [user, setUser] = useState<User>(DEFAULT_USER);
+  const {
+    user,
+    updateUser,
+    reports,
+    registeredEvents,
+    savedEvents,
+  } = useAppStore();
   const [editing, setEditing] = useState(false);
-  const [draft, setDraft] = useState<User>(DEFAULT_USER);
+  const [draft, setDraft] = useState<User>(user);
   const [showReports, setShowReports] = useState(false);
-  const { reports, registeredEvents, savedEvents } = useAppStore();
   const navigate = useNavigate();
   const currentLocation = useLocation();
 
@@ -33,7 +36,7 @@ export function ProfilePage() {
   };
 
   const save = () => {
-    setUser(draft);
+    updateUser(draft);
     setEditing(false);
   };
 

@@ -1,7 +1,8 @@
 "use client";
 
 import { createContext, useContext, useState, type ReactNode } from "react";
-import type { SlocialEvent } from "../data/types";
+import type { SlocialEvent, User } from "../data/types";
+import { DEFAULT_USER } from "../data/user";
 import { EVENTS } from "../data/events";
 
 /**
@@ -25,6 +26,8 @@ export interface EventReport {
 }
 
 interface AppStore {
+  user: User;
+  updateUser: (user: User) => void;
   events: SlocialEvent[];
   registeredEvents: SlocialEvent[];
   savedEvents: SlocialEvent[];
@@ -50,6 +53,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
   const [savedEvents, setSavedEvents] = useState<SlocialEvent[]>([]);
   const [reportedEvents, setReportedEvents] = useState<SlocialEvent[]>([]);
   const [reports, setReports] = useState<EventReport[]>([]);
+  const [user, setUser] = useState<User>(DEFAULT_USER);
 
   function registerForEvent(event: SlocialEvent) {
     setRegisteredEvents((currentEvents) => {
@@ -127,6 +131,8 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
   return (
     <AppStoreContext.Provider
       value={{
+        user,
+        updateUser: setUser,
         events,
         registeredEvents,
         savedEvents,
