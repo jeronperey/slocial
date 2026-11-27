@@ -55,7 +55,7 @@ export function MyEventsPage() {
                 onClick={() => setSelectedEvent(event)}
                 className="rounded-xl bg-surface p-4 text-left hover:bg-raised focus-visible:outline-2 focus-visible:outline-primary"
               >
-                <h2 className="font-bold">{event.id}</h2>
+                <h2 className="font-bold">{event.title}</h2>
                 <p className="mt-1 text-sm text-muted">{event.date}</p>
                 <p className="text-sm text-muted">{event.address}</p>
               </button>

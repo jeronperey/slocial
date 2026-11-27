@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, type ReactNode } from "react";
-import type { Category, SlocialEvent } from "../data/types";
+import type { SlocialEvent } from "../data/types";
 import { EVENTS } from "../data/events";
 
 /**

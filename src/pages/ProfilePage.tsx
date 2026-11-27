@@ -145,24 +145,20 @@ export function ProfilePage() {
                 ) : (
                   reports.map((report) => (
                     <article
-                      key={report.event.name}
+                      key={report.event.id}
                       className="relative rounded-2xl bg-surface p-3.5 pr-12"
                     >
                       <button
                         type="button"
-                        aria-label={`Edit report for ${report.event.name}`}
+                        aria-label={`Edit report for ${report.event.title}`}
                         className="absolute right-3 top-3 flex size-8 items-center justify-center rounded-lg text-muted hover:bg-raised hover:text-ink focus-visible:outline-2 focus-visible:outline-primary"
                         onClick={() =>
                           navigate(
-                            `/events/${encodeURIComponent(report.event.name)}/report`,
+                            `/events/${encodeURIComponent(report.event.id)}/report`,
                             {
                               state: {
                                 backgroundLocation: currentLocation,
-                                event: {
-                                  ...report.event,
-                                  lat: 0,
-                                  lng: 0,
-                                },
+                                event: report.event,
                               },
                             },
                           )
@@ -171,7 +167,7 @@ export function ProfilePage() {
                         <PencilIcon size={15} />
                       </button>
 
-                      <h3 className="text-sm font-bold">{report.event.name}</h3>
+                      <h3 className="text-sm font-bold">{report.event.title}</h3>
                       {report.reasons.length > 0 && (
                         <div className="mt-2 flex flex-wrap gap-1">
                           {report.reasons.map((reason) => (

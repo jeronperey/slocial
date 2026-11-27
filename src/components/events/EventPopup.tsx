@@ -80,7 +80,7 @@ export function EventPopup({
       <div className="flex flex-col gap-4 rounded-xl bg-line p-8 relative w-[25rem] max-w-full">
         <div>
           <EventSummary
-            name={event.id}
+            name={event.title}
             date={event.date}
             time={event.time}
             location={event.address}

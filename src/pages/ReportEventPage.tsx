@@ -6,7 +6,6 @@ import { useLocation, useNavigate, type Location } from "react-router";
 import { EventPopup } from "../components/events/EventPopup";
 import { Checkbox } from "../components/ui/Checkbox";
 import { Tag } from "../components/ui/Tag";
-import type { Category } from "../data/types";
 import type { SlocialEvent } from "../data/types";
 import { useAppStore, type ReportReason } from "../store/AppStore";
 /*
@@ -133,7 +132,7 @@ export function ReportEventPage() {
           <div className="mb-5 border-b border-gray-300 pb-4">
             <h2 className="flex items-center gap-2 text-base font-bold">
               <FontAwesomeIcon icon={faPeopleGroup} />
-              {event.id}
+              {event.title}
             </h2>
             {event.description && (
               <p className="mt-2 text-sm">{event.description}</p>
