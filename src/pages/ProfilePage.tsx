@@ -1,4 +1,4 @@
-import { PencilIcon } from "lucide-react";
+import { PencilIcon, Trash2Icon } from "lucide-react";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { AppHeader } from "../components/layout/AppHeader";
@@ -14,6 +14,7 @@ export function ProfilePage() {
     user,
     updateUser,
     reports,
+    deleteReport,
     registeredEvents,
     savedEvents,
   } = useAppStore();
@@ -149,12 +150,12 @@ export function ProfilePage() {
                   reports.map((report) => (
                     <article
                       key={report.event.id}
-                      className="relative rounded-2xl bg-surface p-3.5 pr-12"
+                      className="relative rounded-2xl bg-surface p-3.5 pr-24"
                     >
                       <button
                         type="button"
                         aria-label={`Edit report for ${report.event.title}`}
-                        className="absolute right-3 top-3 flex size-8 items-center justify-center rounded-lg text-muted hover:bg-raised hover:text-ink focus-visible:outline-2 focus-visible:outline-primary"
+                        className="absolute right-12 top-3 flex size-8 items-center justify-center rounded-lg text-muted hover:bg-raised hover:text-ink focus-visible:outline-2 focus-visible:outline-primary"
                         onClick={() =>
                           navigate(
                             `/events/${encodeURIComponent(report.event.id)}/report`,
@@ -168,6 +169,18 @@ export function ProfilePage() {
                         }
                       >
                         <PencilIcon size={15} />
+                      </button>
+                      <button
+                        type="button"
+                        aria-label={`Delete report for ${report.event.title}`}
+                        className="absolute right-3 top-3 flex size-8 items-center justify-center rounded-lg text-muted hover:bg-danger/15 hover:text-danger focus-visible:outline-2 focus-visible:outline-primary"
+                        onClick={() => {
+                          if (window.confirm(`Delete your report for ${report.event.title}?`)) {
+                            deleteReport(report.event.id);
+                          }
+                        }}
+                      >
+                        <Trash2Icon size={15} />
                       </button>
 
                       <h3 className="text-sm font-bold">{report.event.title}</h3>

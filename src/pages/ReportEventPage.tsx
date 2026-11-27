@@ -39,7 +39,7 @@ export function ReportEventPage() {
   // get event details from event that was reported (which is in routeState.event)
   const routeState = location.state as ReportRouteState | null;
   const event = routeState?.event;
-  const { submitReport, reports } = useAppStore();
+  const { submitReport, deleteReport, reports } = useAppStore();
   const existingReport = event
     ? reports.find((report) => report.event.id === event.id)
     : undefined;
@@ -183,6 +183,20 @@ export function ReportEventPage() {
             >
               {existingReport ? "Update Report" : "Submit Report"}
             </button>
+            {existingReport && (
+              <button
+                type="button"
+                onClick={() => {
+                  if (window.confirm("Delete this report?")) {
+                    deleteReport(event.id);
+                    handleBack();
+                  }
+                }}
+                className="h-11 rounded-[14px] border-[1.5px] border-danger/55 px-4 text-sm font-bold text-danger hover:bg-danger/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+              >
+                Delete Report
+              </button>
+            )}
           </form>
         </section>
       </div>
