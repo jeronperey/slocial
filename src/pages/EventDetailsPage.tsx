@@ -1,24 +1,25 @@
+import { useNavigate, useParams } from "react-router";
 import { EventPopup } from "../components/events/EventPopup";
-import { useState } from "react";
+import { useAppStore } from "../store/AppStore";
+import { NotFoundPage } from "./NotFoundPage";
 
-// Full event info with unregister, directions and report.
-// TODO: build this page.
+// Full event info for the event in the URL.
 export function EventDetailsPage() {
-  const [open, setOpen] = useState(true);
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { events } = useAppStore();
+  const event = events.find((e) => e.id === id);
+
+  if (!event) return <NotFoundPage />;
+
   return (
     <EventPopup
-      isOpen={open}
+      isOpen={true}
       onClose={() => {
-        setOpen(false);
+        if ((window.history.state?.idx ?? 0) > 0) navigate(-1);
+        else navigate("/events");
       }}
-      categories={"casual"}
-      name="Corgi Meetup"
-      date="Saturday October 14th"
-      time="11:00 AM"
-      location="Central Park"
-      lat={35.2803}
-      lng={-120.6631}
-      description="Join us for a fun day of corgi activities!"
+      event={event}
     />
   );
 }

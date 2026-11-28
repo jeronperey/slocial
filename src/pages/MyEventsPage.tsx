@@ -36,7 +36,7 @@ export function MyEventsPage() {
           onClick={() => setSection("saved")}
           className={`flex-1 rounded-lg py-2 text-sm font-bold ${section === "saved" ? "bg-primary text-on-primary" : "bg-raised text-muted"}`}
         >
-          Saved ({savedEvents.length})
+          Interested ({savedEvents.length})
         </button>
       </div>
       <div className="min-h-0 flex-1 overflow-y-auto p-4">
@@ -44,7 +44,7 @@ export function MyEventsPage() {
           <p className="py-8 text-center text-sm text-muted">
             {section === "going"
               ? "You are not going to any events yet."
-              : "You have not saved any events yet."}
+              : "You have not marked any events as interested yet."}
           </p>
         ) : (
           <div className="flex flex-col gap-3">
@@ -55,7 +55,7 @@ export function MyEventsPage() {
                 onClick={() => setSelectedEvent(event)}
                 className="rounded-xl bg-surface p-4 text-left hover:bg-raised focus-visible:outline-2 focus-visible:outline-primary"
               >
-                <h2 className="font-bold">{event.id}</h2>
+                <h2 className="font-bold">{event.title}</h2>
                 <p className="mt-1 text-sm text-muted">{event.date}</p>
                 <p className="text-sm text-muted">{event.address}</p>
               </button>

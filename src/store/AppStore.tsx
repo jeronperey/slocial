@@ -1,7 +1,8 @@
 "use client";
 
 import { createContext, useContext, useState, type ReactNode } from "react";
-import type { Category, SlocialEvent } from "../data/types";
+import type { SlocialEvent, User } from "../data/types";
+import { DEFAULT_USER } from "../data/user";
 import { EVENTS } from "../data/events";
 
 /**
@@ -25,6 +26,8 @@ export interface EventReport {
 }
 
 interface AppStore {
+  user: User;
+  updateUser: (user: User) => void;
   events: SlocialEvent[];
   registeredEvents: SlocialEvent[];
   savedEvents: SlocialEvent[];
@@ -37,6 +40,7 @@ interface AppStore {
     reasons: ReportReason[],
     additionalInfo: string,
   ) => void;
+  deleteReport: (eventId: string) => void;
   unregisterFromEvent: (eventName: string) => void;
   unsaveEvent: (eventName: string) => void;
 }
@@ -50,6 +54,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
   const [savedEvents, setSavedEvents] = useState<SlocialEvent[]>([]);
   const [reportedEvents, setReportedEvents] = useState<SlocialEvent[]>([]);
   const [reports, setReports] = useState<EventReport[]>([]);
+  const [user, setUser] = useState<User>(DEFAULT_USER);
 
   function registerForEvent(event: SlocialEvent) {
     setRegisteredEvents((currentEvents) => {
@@ -103,6 +108,15 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
     ]);
   }
 
+  function deleteReport(eventId: string) {
+    setReportedEvents((currentEvents) =>
+      currentEvents.filter((event) => event.id !== eventId),
+    );
+    setReports((currentReports) =>
+      currentReports.filter((report) => report.event.id !== eventId),
+    );
+  }
+
   function unregisterFromEvent(eventName: string) {
     setRegisteredEvents((currentEvents) =>
       currentEvents.filter((event) => event.id !== eventName),
@@ -127,6 +141,8 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
   return (
     <AppStoreContext.Provider
       value={{
+        user,
+        updateUser: setUser,
         events,
         registeredEvents,
         savedEvents,
@@ -137,6 +153,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
         saveEvent,
         unsaveEvent,
         submitReport,
+        deleteReport,
       }}
     >
       {children}

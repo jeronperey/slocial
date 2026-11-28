@@ -11,13 +11,12 @@ import { FilterBar } from "../components/events/FilterBar";
 import { AppHeader } from "../components/layout/AppHeader";
 import { FilterPanel } from "../components/events/FilterPanel";
 import { SearchBar } from "../components/events/SearchBar";
-import { DEFAULT_USER } from "../data/user";
 import { EventPopup } from "../components/events/EventPopup";
 
 // Home screen: map of nearby events with filters and an event popup (register, save, report).
 // TODO: build this page.
 export function MapPage() {
-  const { events } = useAppStore();
+  const { events, user } = useAppStore();
   const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS);
   const [panelOpen, setPanelOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -25,7 +24,7 @@ export function MapPage() {
   const [selectedId, setSelectedId] = useState<string | undefined>();
   const visibleEvents = filterEvents(events, filters, {
     origin: YOU_POSITION,
-    userAge: DEFAULT_USER.age,
+    userAge: user.age,
   });
 
   function handleSelectEvent(id: string) {

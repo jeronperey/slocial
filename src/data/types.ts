@@ -12,6 +12,7 @@ export interface SlocialEvent {
   restrictions?: string;
   time?: string;
   price?: number;
+  ticketUrl?: string;
   attendance: number;
   // TODO: date, time, address, description, price, restrictions, map position…
 }

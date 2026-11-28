@@ -1,4 +1,4 @@
-import { PencilIcon } from "lucide-react";
+import { PencilIcon, Trash2Icon } from "lucide-react";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { AppHeader } from "../components/layout/AppHeader";
@@ -9,13 +9,17 @@ import { DEFAULT_USER } from "../data/user";
 import { useAppStore } from "../store/AppStore";
 
 // Shows the user's info with an option to edit it.
-// TODO: move the user into AppStore so edits survive switching tabs.
 
 export function ProfilePage() {
-  const [user, setUser] = useState<User>(DEFAULT_USER);
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState<User>(DEFAULT_USER);
-  const { reports, registeredEvents, savedEvents } = useAppStore();
+  const {  
+    user,
+    updateUser,
+    reports,
+    deleteReport,
+    registeredEvents,
+    savedEvents, } = useAppStore();
   const navigate = useNavigate();
   const currentLocation = useLocation();
   // The header menu's "My reports" opens this page with the list already showing.
@@ -41,7 +45,7 @@ export function ProfilePage() {
   };
 
   const save = () => {
-    setUser(draft);
+    updateUser(draft);
     setEditing(false);
   };
 
@@ -186,24 +190,20 @@ export function ProfilePage() {
                 ) : (
                   reports.map((report) => (
                     <article
-                      key={report.event.name}
-                      className="relative rounded-2xl bg-surface p-3.5 pr-12"
+                      key={report.event.id}
+                      className="relative rounded-2xl bg-surface p-3.5 pr-24"
                     >
                       <button
                         type="button"
-                        aria-label={`Edit report for ${report.event.name}`}
-                        className="absolute right-3 top-3 flex size-8 items-center justify-center rounded-lg text-muted hover:bg-raised hover:text-ink focus-visible:outline-2 focus-visible:outline-primary"
+                        aria-label={`Edit report for ${report.event.title}`}
+                        className="absolute right-12 top-3 flex size-8 items-center justify-center rounded-lg text-muted hover:bg-raised hover:text-ink focus-visible:outline-2 focus-visible:outline-primary"
                         onClick={() =>
                           navigate(
-                            `/events/${encodeURIComponent(report.event.name)}/report`,
+                            `/events/${encodeURIComponent(report.event.id)}/report`,
                             {
                               state: {
                                 backgroundLocation: currentLocation,
-                                event: {
-                                  ...report.event,
-                                  lat: 0,
-                                  lng: 0,
-                                },
+                                event: report.event,
                               },
                             },
                           )
@@ -211,8 +211,20 @@ export function ProfilePage() {
                       >
                         <PencilIcon size={15} />
                       </button>
+                      <button
+                        type="button"
+                        aria-label={`Delete report for ${report.event.title}`}
+                        className="absolute right-3 top-3 flex size-8 items-center justify-center rounded-lg text-muted hover:bg-danger/15 hover:text-danger focus-visible:outline-2 focus-visible:outline-primary"
+                        onClick={() => {
+                          if (window.confirm(`Delete your report for ${report.event.title}?`)) {
+                            deleteReport(report.event.id);
+                          }
+                        }}
+                      >
+                        <Trash2Icon size={15} />
+                      </button>
 
-                      <h3 className="text-sm font-bold">{report.event.name}</h3>
+                      <h3 className="text-sm font-bold">{report.event.title}</h3>
                       {report.reasons.length > 0 && (
                         <div className="mt-2 flex flex-wrap gap-1">
                           {report.reasons.map((reason) => (
@@ -238,7 +250,7 @@ export function ProfilePage() {
 
             <div className="mt-4 grid grid-cols-2 gap-2">
               <Stat value={registeredEvents.length} label="Going" />
-              <Stat value={savedEvents.length} label="Saved" />
+              <Stat value={savedEvents.length} label="Interested" />
             </div>
           </>
         )}

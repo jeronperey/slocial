@@ -24,6 +24,7 @@ export const EVENTS: SlocialEvent[] = [
     restrictions: "21+",
     time: "6:00PM",
     price: 50,
+    ticketUrl: "https://www.eventbrite.com/d/ca--san-luis-obispo/events/",
     attendance: 120,
   },
   {
@@ -36,6 +37,7 @@ export const EVENTS: SlocialEvent[] = [
     address: "Cal Poly Football Field",
     time: "1:00PM",
     price: 20,
+    ticketUrl: "https://www.eventbrite.com/d/ca--san-luis-obispo/events/",
     attendance: 230,
   },
   {
