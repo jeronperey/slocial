@@ -5,24 +5,27 @@ import { AppHeader } from "../components/layout/AppHeader";
 import { Button } from "../components/ui/Button";
 import { TextInput } from "../components/ui/TextInput";
 import type { User } from "../data/types";
+import { DEFAULT_USER } from "../data/user";
 import { useAppStore } from "../store/AppStore";
 
 // Shows the user's info with an option to edit it.
 
 export function ProfilePage() {
-  const {
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState<User>(DEFAULT_USER);
+  const {  
     user,
     updateUser,
     reports,
     deleteReport,
     registeredEvents,
-    savedEvents,
-  } = useAppStore();
-  const [editing, setEditing] = useState(false);
-  const [draft, setDraft] = useState<User>(user);
-  const [showReports, setShowReports] = useState(false);
+    savedEvents, } = useAppStore();
   const navigate = useNavigate();
   const currentLocation = useLocation();
+  // The header menu's "My reports" opens this page with the list already showing.
+  const [showReports, setShowReports] = useState(
+    Boolean(currentLocation.state?.openReports),
+  );
 
   const initials = user.name
     .split(" ")
@@ -30,6 +33,11 @@ export function ProfilePage() {
     .join("")
     .slice(0, 2)
     .toUpperCase();
+
+  const nameValid = /^[A-Za-z' -]+$/.test(draft.name.trim());
+  const emailValid = /^\S+@\S+\.\S+$/.test(draft.email);
+  const phoneValid = draft.phone.length === 10;
+  const ageValid = draft.age >= 1 && draft.age <= 120;
 
   const startEditing = () => {
     setDraft(user);
@@ -62,29 +70,62 @@ export function ProfilePage() {
           <div className="flex flex-col gap-3">
             <TextInput
               label="Name"
+              placeholder="Jane Doe"
+              maxLength={50}
               value={draft.name}
               onChange={(e) => setDraft({ ...draft, name: e.target.value })}
             />
+            {!nameValid && (
+              <p className="text-xs text-danger">
+                Enter a name using letters only.
+              </p>
+            )}
             <TextInput
               label="Email"
               type="email"
+              placeholder="name@example.com"
               value={draft.email}
               onChange={(e) => setDraft({ ...draft, email: e.target.value })}
             />
+            {!emailValid && (
+              <p className="text-xs text-danger">
+                Enter an email like name@example.com.
+              </p>
+            )}
             <TextInput
               label="Phone"
               type="tel"
+              inputMode="numeric"
+              placeholder="8051234567"
+              maxLength={10}
               value={draft.phone}
-              onChange={(e) => setDraft({ ...draft, phone: e.target.value })}
-            />
-            <TextInput
-              label="Age"
-              type="number"
-              value={draft.age}
               onChange={(e) =>
-                setDraft({ ...draft, age: Number(e.target.value) })
+                setDraft({ ...draft, phone: e.target.value.replace(/\D/g, "") })
               }
             />
+            {!phoneValid && (
+              <p className="text-xs text-danger">
+                Phone number must be 10 digits.
+              </p>
+            )}
+            <TextInput
+              label="Age"
+              inputMode="numeric"
+              placeholder="19"
+              maxLength={3}
+              value={draft.age || ""}
+              onChange={(e) =>
+                setDraft({
+                  ...draft,
+                  age: Number(e.target.value.replace(/\D/g, "")),
+                })
+              }
+            />
+            {!ageValid && (
+              <p className="text-xs text-danger">
+                Age must be between 1 and 120.
+              </p>
+            )}
             <div className="mt-2 flex gap-2">
               <Button
                 variant="secondary"
@@ -97,7 +138,7 @@ export function ProfilePage() {
                 glow
                 className="flex-1"
                 onClick={save}
-                disabled={!draft.name.trim()}
+                disabled={!nameValid || !emailValid || !phoneValid || !ageValid}
               >
                 Save changes
               </Button>
